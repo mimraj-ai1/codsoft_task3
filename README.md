@@ -1,5 +1,4 @@
 # CODSOFT 
-# TRIBUTE  PAGE
 
 # A.P.J. Abdul Kalam Tribute Page
 
@@ -70,14 +69,6 @@ codsoft_task2/
 
 That's it! No build process or dependencies needed.
 
----
-
-## 📸 Preview
-
-*[Add screenshot of your tribute page here]*
-
----
-
 ## 📚 Content Sections
 
 ### 🏆 About
@@ -135,14 +126,6 @@ This project is open source and available under the [MIT License](LICENSE).
 
 ---
 
-## 📧 Contact
-
-**Your Name**  
-- GitHub: [@your-username](https://github.com/your-username)
-- LinkedIn: [Your Profile](https://linkedin.com/in/your-profile)
-- Email: your.email@example.com
-
----
 
 ## ⭐ Show Your Support
 
