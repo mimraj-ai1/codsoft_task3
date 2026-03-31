@@ -8,7 +8,7 @@ export default function ReactQuiz() {
     return (
         <>
             <Navbar />
-            <QuizStructure Questions={Questions} path = "/courses/mern/react"/>
+            <QuizStructure Questions={Questions} path = "/course/react"/>
             <Footer />
         </>
     )

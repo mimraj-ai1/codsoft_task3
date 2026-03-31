@@ -9,10 +9,11 @@ ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     {/* <BrowserRouter> */}
     <Auth0Provider
-      domain="Tr..us.auth0.com"
-      clientId="pAqkqTfjGLYarZl6lcnHOddMOaDvSoTF"
+      domain="dev-o87pab3dhngt55ct.us.auth0.com"
+      clientId="pAqkqTfjGLYarZl6lcnHOddMOaDvSoTF"  // Confirm this Client ID is still correct!
       authorizationParams={{
-        redirect_uri: window.location.origin
+        redirect_uri: window.location.origin,
+        audience: "https://onlearny-api.com"
       }}
     >
       <App />

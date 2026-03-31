@@ -46,8 +46,8 @@ This eLearning platform offers a wide range of courses, interactive quizzes, and
 
 1.  **Clone the repository:**
     ```bash
-    git clone https://github.com/Tr.-goswami/eLearning-website.git
-    cd eLearning-website
+    git
+    cd OnLearny
     ```
 
 2.  **Install dependencies:**
@@ -76,9 +76,9 @@ This eLearning platform offers a wide range of courses, interactive quizzes, and
 1.  **Start the Backend:**
     ```bash
     cd back-end
-    node index.js
-    # Or if you have nodemon installed:
-    # nodemon index.js
+    node server.js
+    # Or to automatically restart on changes:
+    # npm run dev
     ```
 
 2.  **Start the Frontend:**
@@ -86,7 +86,7 @@ This eLearning platform offers a wide range of courses, interactive quizzes, and
     # From the root directory
     npm run dev
     ```
-    The application will be available at `http://localhost:5173`.
+    The application will be available at `http://localhost:4110`.
 
 ## 📂 Project Structure
 

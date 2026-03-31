@@ -4,12 +4,14 @@ import Footer from "./Footer";
 import Header from "./Header";
 import Rating from "@mui/material/Rating";
 import Typography from "@mui/material/Typography";
+import { useAuth0 } from "@auth0/auth0-react";
 
 const API_BASE = import.meta.env.VITE_API_BASE_URL || "http://localhost:3000";
 
 export default function FeedbackAll() {
   const [value, setValue] = React.useState(2);
   const [feedbackData, setFeedbackData] = useState([]);
+  const { getAccessTokenSilently } = useAuth0();
 
   const fetchFeedback = React.useCallback(async () => {
     try {
@@ -27,10 +29,21 @@ export default function FeedbackAll() {
 
   const handleDelete = async (id) => {
     try {
-      await fetch(`${API_BASE}/feedback/${id}`, { method: "DELETE" });
-      setFeedbackData((prev) => prev.filter((f) => f._id !== id));
+      const token = await getAccessTokenSilently();
+      const res = await fetch(`${API_BASE}/feedback/${id}`, { 
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+      if (res.ok) {
+        setFeedbackData((prev) => prev.filter((f) => f._id !== id));
+      } else {
+        alert("You are not authorized to delete this feedback.");
+      }
     } catch (error) {
       console.error(error);
+      alert("Please log in to perform this action.");
     }
   };
 
@@ -68,18 +81,25 @@ export default function FeedbackAll() {
                 date: new Date().toISOString(),
               };
               try {
+                const token = await getAccessTokenSilently();
                 const res = await fetch(`${API_BASE}/feedback/new`, {
                   method: "POST",
-                  headers: { "Content-Type": "application/json" },
+                  headers: { 
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${token}`
+                  },
                   body: JSON.stringify(body),
                 });
                 if (res.ok) {
                   form.reset();
                   setValue(2);
                   fetchFeedback();
+                } else {
+                  alert("Failed to post feedback. Make sure you are logged in!");
                 }
               } catch (err) {
                 console.error(err);
+                alert("Please log in to post feedback.");
               }
             }}
           >

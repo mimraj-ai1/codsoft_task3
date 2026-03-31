@@ -19,9 +19,33 @@ import {
 import { useAuth0 } from "@auth0/auth0-react";
 import Navbar from "./Navbar";
 import Footer from "./Footer";
+import axios from "axios";
+import { Link } from "react-router-dom";
+import coursesData from "../../data/coursesData";
 
 export default function Profile() {
-  const { user, isAuthenticated, isLoading } = useAuth0();
+  const { user, isAuthenticated, isLoading, getAccessTokenSilently } = useAuth0();
+  const [userProfile, setUserProfile] = React.useState(null);
+
+  React.useEffect(() => {
+    const fetchProfile = async () => {
+      if (isAuthenticated) {
+        try {
+          const token = await getAccessTokenSilently();
+          const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
+          const response = await axios.get(`${API_URL}/api/user/profile`, {
+            headers: { Authorization: `Bearer ${token}` },
+          });
+          if (response.data.user) {
+            setUserProfile(response.data.user);
+          }
+        } catch (error) {
+          console.error("Failed to fetch profile", error);
+        }
+      }
+    };
+    fetchProfile();
+  }, [isAuthenticated, getAccessTokenSilently]);
 
   return (
     <>
@@ -184,166 +208,80 @@ export default function Profile() {
                   </MDBCard>
 
                   <MDBRow>
-                    <MDBCol md="6">
+                    <MDBCol md="12">
                       <MDBCard className="mb-4 mb-md-0">
                         <MDBCardBody>
                           <MDBCardText className="mb-4">
                             <span className="text-primary font-italic me-1">
-                              assigment
+                              dashboard
                             </span>{" "}
-                            Project Status
+                            My Learning
                           </MDBCardText>
-                          <MDBCardText
-                            className="mb-1"
-                            style={{ fontSize: ".77rem" }}
-                          >
-                            Web Design
-                          </MDBCardText>
-                          <MDBProgress className="rounded">
-                            <MDBProgressBar
-                              width={80}
-                              valuemin={0}
-                              valuemax={100}
-                            />
-                          </MDBProgress>
+                          
+                          <div className="row g-3">
+                            {userProfile && userProfile.enrolledCourses && userProfile.enrolledCourses.length > 0 ? (
+                              userProfile.enrolledCourses.map((courseId) => {
+                                const course = coursesData[courseId];
+                                if (!course) return null;
 
-                          <MDBCardText
-                            className="mt-4 mb-1"
-                            style={{ fontSize: ".77rem" }}
-                          >
-                            JavaScript library
-                          </MDBCardText>
-                          <MDBProgress className="rounded">
-                            <MDBProgressBar
-                              width={72}
-                              valuemin={0}
-                              valuemax={100}
-                            />
-                          </MDBProgress>
+                                const allProgress = userProfile.courseProgress || [];
+                                const progressObj = allProgress.find(p => p.courseId === courseId);
+                                const completedCount = progressObj ? progressObj.completedVideos.length : 0;
+                                const totalVideos = course.videos ? course.videos.length : 1;
+                                const progressPercentage = Math.round((completedCount / totalVideos) * 100);
 
-                          <MDBCardText
-                            className="mt-4 mb-1"
-                            style={{ fontSize: ".77rem" }}
-                          >
-                            C Programming
-                          </MDBCardText>
-                          <MDBProgress className="rounded">
-                            <MDBProgressBar
-                              width={89}
-                              valuemin={0}
-                              valuemax={100}
-                            />
-                          </MDBProgress>
+                                let continueText = "Start Learning";
+                                if (progressObj && progressObj.lastWatchedIndex !== undefined && course.videos) {
+                                    const nextIndex = progressObj.lastWatchedIndex + 1;
+                                    if (nextIndex < totalVideos) {
+                                        continueText = `Next: ${course.videos[nextIndex].title}`;
+                                    } else if (progressPercentage >= 100) {
+                                        continueText = "Course Completed 🎉";
+                                    } else {
+                                        continueText = "Continue Learning";
+                                    }
+                                }
 
-                          <MDBCardText
-                            className="mt-4 mb-1"
-                            style={{ fontSize: ".77rem" }}
-                          >
-                            DSA
-                          </MDBCardText>
-                          <MDBProgress className="rounded">
-                            <MDBProgressBar
-                              width={55}
-                              valuemin={0}
-                              valuemax={100}
-                            />
-                          </MDBProgress>
+                                return (
+                                  <div className="col-md-6" key={courseId}>
+                                    <div className="card h-100 p-3 shadow-sm border-0 bg-light">
+                                      <h5 className="mb-1">{course.title}</h5>
+                                      <p className="text-muted small mb-3">
+                                        {course.videos?.length || 0} Modules
+                                      </p>
+                                      
+                                      <div className="mb-3">
+                                        <div className="d-flex justify-content-between mb-1">
+                                          <span className="small text-muted">{progressPercentage}% Completed</span>
+                                          <span className="small text-muted">{completedCount}/{totalVideos}</span>
+                                        </div>
+                                        <div className="progress" style={{ height: "6px" }}>
+                                          <div 
+                                            className={`progress-bar ${progressPercentage === 100 ? 'bg-success' : 'bg-primary'}`} 
+                                            role="progressbar" 
+                                            style={{ width: `${progressPercentage}%` }}
+                                          ></div>
+                                        </div>
+                                      </div>
 
-                          <MDBCardText
-                            className="mt-4 mb-1"
-                            style={{ fontSize: ".77rem" }}
-                          >
-                            Backend with Nodejs
-                          </MDBCardText>
-                          <MDBProgress className="rounded">
-                            <MDBProgressBar
-                              width={66}
-                              valuemin={0}
-                              valuemax={100}
-                            />
-                          </MDBProgress>
-                        </MDBCardBody>
-                      </MDBCard>
-                    </MDBCol>
+                                      {progressPercentage < 100 && (
+                                        <p className="small text-truncate text-secondary mb-3">
+                                          <i className="fas fa-play-circle me-1"></i> {continueText}
+                                        </p>
+                                      )}
 
-                    <MDBCol md="6">
-                      <MDBCard className="mb-4 mb-md-0">
-                        <MDBCardBody>
-                          <MDBCardText className="mb-4">
-                            <span className="text-primary font-italic me-1">
-                              assigment
-                            </span>{" "}
-                            Project Status
-                          </MDBCardText>
-                          <MDBCardText
-                            className="mb-1"
-                            style={{ fontSize: ".77rem" }}
-                          >
-                            Web Design
-                          </MDBCardText>
-                          <MDBProgress className="rounded">
-                            <MDBProgressBar
-                              width={80}
-                              valuemin={0}
-                              valuemax={100}
-                            />
-                          </MDBProgress>
+                                      <Link to={`/course/${courseId}`} className="btn btn-sm btn-outline-primary mt-auto">
+                                        {progressPercentage === 100 ? "Review Course" : "Resume Learning"}
+                                      </Link>
+                                    </div>
+                                  </div>
+                                );
+                              })
+                            ) : (
+                              <p className="text-muted mt-3">You have not enrolled in any courses yet.</p>
+                            )}
+                          </div>
 
-                          <MDBCardText
-                            className="mt-4 mb-1"
-                            style={{ fontSize: ".77rem" }}
-                          >
-                            Website Markup
-                          </MDBCardText>
-                          <MDBProgress className="rounded">
-                            <MDBProgressBar
-                              width={72}
-                              valuemin={0}
-                              valuemax={100}
-                            />
-                          </MDBProgress>
-
-                          <MDBCardText
-                            className="mt-4 mb-1"
-                            style={{ fontSize: ".77rem" }}
-                          >
-                            React
-                          </MDBCardText>
-                          <MDBProgress className="rounded">
-                            <MDBProgressBar
-                              width={89}
-                              valuemin={0}
-                              valuemax={100}
-                            />
-                          </MDBProgress>
-
-                          <MDBCardText
-                            className="mt-4 mb-1"
-                            style={{ fontSize: ".77rem" }}
-                          >
-                            JavaScript
-                          </MDBCardText>
-                          <MDBProgress className="rounded">
-                            <MDBProgressBar
-                              width={55}
-                              valuemin={0}
-                              valuemax={100}
-                            />
-                          </MDBProgress>
-
-                          <MDBCardText
-                            className="mt-4 mb-1"
-                            style={{ fontSize: ".77rem" }}
-                          >
-                            Backend API
-                          </MDBCardText>
-                          <MDBProgress className="rounded">
-                            <MDBProgressBar
-                              width={66}
-                              valuemin={0}
-                              valuemax={100}
-                            />
-                          </MDBProgress>
                         </MDBCardBody>
                       </MDBCard>
                     </MDBCol>

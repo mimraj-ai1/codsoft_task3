@@ -5,7 +5,7 @@ import QuizStructure from './QuizStructure'
 import Footer from '../Pages/Footer'
 
 export default function JavascriptQuiz() {
-  let route = "/cources/programming/javascript";
+  let route = "/course/javascript";
   return (
     <>
     <Navbar/>
