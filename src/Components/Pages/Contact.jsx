@@ -94,7 +94,7 @@ export default function Contact() {
               data-wow-delay="0.5s"
             >
               <form onSubmit={onSubmit}>
-                <input type="hidden" name="from_name" value="OnLearnio" />
+                <input type="hidden" name="from_name" value="OnLearny" />
 
                 <div className="row g-3">
                   <div className="col-md-6">
