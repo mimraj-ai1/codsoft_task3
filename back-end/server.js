@@ -57,6 +57,7 @@ app.use("/feedback", feedbackRoutes);
 app.use("/api/user", userRoutes);
 
 // Health Checks for Deployment (Render/Vercel)
+app.get("/", (req, res) => res.status(200).json({ status: "Live", location: "Root API" }));
 app.get("/health", (req, res) => res.status(200).json({ status: "OK", database: "connected" }));
 app.get("/api/courses", (req, res) => {
   // Your course data is stored natively on the React frontend! 
