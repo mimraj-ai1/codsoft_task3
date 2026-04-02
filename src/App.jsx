@@ -23,13 +23,12 @@ import FullstackQuiz from "./Components/Quiz/FullstackQuiz";
 import JavascriptQuiz from "./Components/Quiz/JavascriptQuiz";
 import ReactQuiz from "./Components/Quiz/ReactQuiz";
 import Profile from "./Components/Pages/Profile";
-import { useAuth0 } from "@auth0/auth0-react";
 import Feedback from "./Components/Pages/Feedback";
 import FeedbackAll from "./Components/Pages/FeedbackAll";
 import UserSync from "./Components/Auth/UserSync";
+import SignInRedirect from "./Components/Auth/SignInRedirect";
 
 function App() {
-  const { loginWithRedirect } = useAuth0();
   return (
     <>
       <UserSync />
@@ -43,12 +42,7 @@ function App() {
           <Route path="/contact" element={<Layout headerName="Contact"><Contact /></Layout>} />
           <Route path="/login" element={<Login />} />
           <Route path="/error" element={<ErrorPage />} />
-          <Route
-            path="/signin"
-            render={() => {
-              loginWithRedirect();
-            }}
-          />
+          <Route path="/signin" element={<SignInRedirect />} />
           <Route path="/register" element={<Subscribe />} />
           <Route path="/profile" element={<Profile />} />
 

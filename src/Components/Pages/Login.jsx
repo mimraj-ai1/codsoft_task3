@@ -1,9 +1,24 @@
 import React, { useState } from 'react';
+import { useAuth0 } from '@auth0/auth0-react';
 import Navbar from './Navbar';
 import Footer from './Footer';
 
 export default function Login() {
   const [isLogin, setIsLogin] = useState(false);
+  const [termsAccepted, setTermsAccepted] = useState(false);
+  const { loginWithRedirect, isLoading } = useAuth0();
+
+  const handlePrimaryAuth = () => {
+    if (!isLogin && !termsAccepted) {
+      alert('Please accept the terms & conditions to continue.');
+      return;
+    }
+    loginWithRedirect(
+      isLogin
+        ? {}
+        : { authorizationParams: { screen_hint: 'signup' } }
+    );
+  };
 
   return (
     <>
@@ -57,8 +72,13 @@ export default function Login() {
                   </div>
                 )}
 
-                <button type="button" className="btn btn-primary btn-lg w-100 mb-3 fw-bold">
-                  {isLogin ? 'Login' : 'Sign Up'}
+                <button
+                  type="button"
+                  className="btn btn-primary btn-lg w-100 mb-3 fw-bold"
+                  disabled={isLoading}
+                  onClick={handlePrimaryAuth}
+                >
+                  {isLoading ? 'Please wait…' : isLogin ? 'Login' : 'Sign Up'}
                 </button>
 
                 <div className="text-center mb-3">
@@ -77,7 +97,13 @@ export default function Login() {
 
                 {!isLogin && (
                   <div className="form-check mt-4">
-                    <input className="form-check-input" type="checkbox" id="terms" />
+                    <input
+                      className="form-check-input"
+                      type="checkbox"
+                      id="terms"
+                      checked={termsAccepted}
+                      onChange={(e) => setTermsAccepted(e.target.checked)}
+                    />
                     <label className="form-check-label text-muted small" htmlFor="terms" style={{ fontSize: '0.8rem' }}>
                       By continuing, You agree to OnLearny's terms & conditions & privacy policy
                     </label>

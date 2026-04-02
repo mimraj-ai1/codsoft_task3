@@ -13,8 +13,10 @@ export default function UserSync() {
           const token = await getAccessTokenSilently();
 
           // Hit the sync endpoint with email and name
+          const apiBase =
+            import.meta.env.VITE_API_URL || "http://localhost:3000";
           await axios.post(
-            "http://localhost:4110/sync-user",
+            `${apiBase.replace(/\/$/, "")}/sync-user`,
             {
               email: user.email,
               name: user.name || user.nickname,
