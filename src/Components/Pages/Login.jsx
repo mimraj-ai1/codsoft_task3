@@ -1,21 +1,9 @@
 import React, { useState } from 'react';
 import Navbar from './Navbar';
 import Footer from './Footer';
-import { useAuth0 } from '@auth0/auth0-react';
 
 export default function Login() {
   const [isLogin, setIsLogin] = useState(false);
-  const [email, setEmail] = useState('');
-  const { loginWithRedirect } = useAuth0();
-
-  const handleAuth = () => {
-    loginWithRedirect({
-      authorizationParams: {
-        screen_hint: isLogin ? 'login' : 'signup',
-        login_hint: email || undefined
-      }
-    });
-  };
 
   return (
     <>
@@ -42,7 +30,7 @@ export default function Login() {
             <div className="bg-white rounded shadow-sm p-5" style={{ width: '100%', maxWidth: '450px' }}>
               <h3 className="text-center mb-4 pb-2 text-dark">{isLogin ? 'Login' : 'Sign Up'}</h3>
 
-              <form onSubmit={(e) => { e.preventDefault(); handleAuth(); }}>
+              <form>
                 {!isLogin && (
                   <div className="mb-3">
                     <input type="text" className="form-control form-control-lg bg-light border-0" placeholder="Name" />
@@ -50,18 +38,11 @@ export default function Login() {
                 )}
 
                 <div className="mb-3">
-                  <input 
-                    type="email" 
-                    className="form-control form-control-lg bg-light border-0" 
-                    placeholder="Email Address" 
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                  />
+                  <input type="email" className="form-control form-control-lg bg-light border-0" placeholder="Email Address" />
                 </div>
 
                 <div className="mb-3">
-                   <input type="password" className="form-control form-control-lg bg-light border-0" placeholder="Password" />
-                   <small className="text-muted" style={{fontSize: '0.75rem'}}>You'll verify this securely with Auth0 in the next step.</small>
+                  <input type="password" className="form-control form-control-lg bg-light border-0" placeholder="Password" />
                 </div>
 
                 {!isLogin && (
@@ -72,15 +53,12 @@ export default function Login() {
 
                 {isLogin && (
                   <div className="text-end mb-4">
-                    <a href="#" className="text-decoration-none small text-primary" onClick={(e) => {
-                      e.preventDefault();
-                      loginWithRedirect({ authorizationParams: { screen_hint: 'signup' } });
-                    }}>Forgot password?</a>
+                    <a href="#" className="text-decoration-none small text-primary">Forgot password?</a>
                   </div>
                 )}
 
-                <button type="submit" className="btn btn-primary btn-lg w-100 mb-3 fw-bold">
-                  {isLogin ? 'Login' : 'Sign Up with Auth0'}
+                <button type="button" className="btn btn-primary btn-lg w-100 mb-3 fw-bold">
+                  {isLogin ? 'Login' : 'Sign Up'}
                 </button>
 
                 <div className="text-center mb-3">
@@ -93,13 +71,13 @@ export default function Login() {
                     className="btn btn-outline-primary btn-lg w-100 fw-bold"
                     onClick={() => setIsLogin(!isLogin)}
                   >
-                    {isLogin ? 'Switch to Sign Up' : 'Switch to Login'}
+                    {isLogin ? 'Sign Up' : 'Login'}
                   </button>
                 </div>
 
                 {!isLogin && (
                   <div className="form-check mt-4">
-                    <input className="form-check-input" type="checkbox" id="terms" required />
+                    <input className="form-check-input" type="checkbox" id="terms" />
                     <label className="form-check-label text-muted small" htmlFor="terms" style={{ fontSize: '0.8rem' }}>
                       By continuing, You agree to OnLearny's terms & conditions & privacy policy
                     </label>
