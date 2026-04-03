@@ -48,7 +48,7 @@ export default function Footer() {
               </p> */}
               <p className="mb-2">
                 <i className="fa fa-envelope me-3" />
-                services@codsoft.in
+                onlearny.contact@gmail.com
               </p>
               <div className="d-flex pt-2">
                 <a

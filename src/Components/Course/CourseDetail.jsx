@@ -6,6 +6,7 @@ import Coursecart from './Coursecart';
 import coursesData from '../../data/coursesData';
 import { useAuth0 } from '@auth0/auth0-react';
 import axios from 'axios';
+import { accessTokenSilentlyOpts } from '../../auth/accessTokenOptions.js';
 
 export default function CourseDetail() {
   const { courseId } = useParams();
@@ -20,7 +21,7 @@ export default function CourseDetail() {
     const checkEnrollment = async () => {
       if (isAuthenticated) {
         try {
-          const token = await getAccessTokenSilently();
+          const token = await getAccessTokenSilently(accessTokenSilentlyOpts());
           const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
           const response = await axios.get(`${API_URL}/api/user/profile`, {
             headers: { Authorization: `Bearer ${token}` },
@@ -48,7 +49,7 @@ export default function CourseDetail() {
     }
     try {
       setLoading(true);
-      const token = await getAccessTokenSilently();
+      const token = await getAccessTokenSilently(accessTokenSilentlyOpts());
       const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
       await axios.post(
         `${API_URL}/api/user/enroll`,
@@ -69,7 +70,7 @@ export default function CourseDetail() {
       if (!completedVideos.includes(videoIndex)) {
          setCompletedVideos([...completedVideos, videoIndex]);
       }
-      const token = await getAccessTokenSilently();
+      const token = await getAccessTokenSilently(accessTokenSilentlyOpts());
       const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
       await axios.post(
         `${API_URL}/api/user/progress`,

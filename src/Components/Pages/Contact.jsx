@@ -13,7 +13,7 @@ export default function Contact() {
     setResult("Sending....");
     const formData = new FormData(event.target);
 
-    formData.append("access_key", "b9fd69e0-c307-4f57-b90f-9c4106746fcb");
+    formData.append("access_key", "b6490c38-e796-4e42-8ad6-7c81aa5714ee");
 
     const response = await fetch("https://api.web3forms.com/submit", {
       method: "POST",
@@ -84,7 +84,7 @@ export default function Contact() {
                 </div>
                 <div className="ms-3">
                   <h5 className="text-primary">Email</h5>
-                  <p className="mb-0">services@codsoft.in</p>
+                  <p className="mb-0">onlearny.contact@gmail.com</p>
                 </div>
               </div>
             </div> */}

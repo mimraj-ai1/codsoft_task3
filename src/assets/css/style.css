@@ -156,6 +156,59 @@
     }
 }
 
+/*** Navbar Join Now / Log out — Vercel-style: full bar height, flush edges, teal primary ***/
+@media (min-width: 992px) {
+    .navbar-cta-host.navbar-expand-lg.navbar-light {
+        height: 75px;
+        min-height: 75px;
+        max-height: 75px;
+        align-items: stretch;
+        padding-top: 0 !important;
+        padding-bottom: 0 !important;
+        overflow: visible;
+    }
+
+    .navbar-cta-host > .navbar-brand,
+    .navbar-cta-host > .navbar-toggler {
+        align-self: center;
+    }
+
+    .navbar-cta-host > .navbar-collapse {
+        height: 100%;
+        max-height: none;
+    }
+
+    .navbar-light .navbar-cta-btn {
+        align-items: center;
+        justify-content: center;
+        align-self: stretch;
+        height: 100%;
+        min-height: 0;
+        padding: 0 2.5rem;
+        margin: 0 !important;
+        border: none !important;
+        border-radius: 0 !important;
+        box-shadow: none !important;
+        outline-offset: -2px;
+        /* Match Bootstrap / Vercel template primary (teal) */
+        background-color: #06bbcc !important;
+        border-color: #06bbcc !important;
+        color: #fff !important;
+    }
+
+    .navbar-light .navbar-cta-btn:hover,
+    .navbar-light .navbar-cta-btn:focus-visible {
+        background-color: #05a8b8 !important;
+        border-color: #05a8b8 !important;
+        color: #fff !important;
+    }
+
+    .navbar-light .navbar-cta-btn:disabled {
+        opacity: 0.65;
+        color: #fff !important;
+    }
+}
+
 
 /*** Header carousel ***/
 @media (max-width: 768px) {

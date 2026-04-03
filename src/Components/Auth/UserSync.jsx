@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { useAuth0 } from "@auth0/auth0-react";
 import axios from "axios";
+import { accessTokenSilentlyOpts } from "../../auth/accessTokenOptions.js";
 
 export default function UserSync() {
   const { isAuthenticated, user, getAccessTokenSilently } = useAuth0();
@@ -10,7 +11,7 @@ export default function UserSync() {
       if (isAuthenticated && user) {
         try {
           // Get the secure token for the backend API
-          const token = await getAccessTokenSilently();
+          const token = await getAccessTokenSilently(accessTokenSilentlyOpts());
 
           // Hit the sync endpoint with email and name
           const apiBase =

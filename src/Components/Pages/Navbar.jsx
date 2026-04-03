@@ -8,7 +8,7 @@ export default function Navbar() {
     useAuth0();
   return (
     <>
-      <nav className="navbar navbar-expand-lg bg-white navbar-light shadow sticky-top p-0">
+      <nav className="navbar navbar-expand-lg bg-white navbar-light shadow sticky-top p-0 navbar-cta-host">
         <Link
           to="/"
           className="navbar-brand d-flex align-items-center px-4 px-lg-5"
@@ -25,7 +25,10 @@ export default function Navbar() {
         >
           <span className="navbar-toggler-icon"></span>
         </button>
-        <div className="collapse navbar-collapse" id="navbarCollapse">
+        <div
+          className="collapse navbar-collapse align-items-lg-center"
+          id="navbarCollapse"
+        >
           <div className="navbar-nav ms-auto p-4 p-lg-0">
             <NavLink
               exact
@@ -103,7 +106,8 @@ export default function Navbar() {
           )}
           {isAuthenticated ? (
             <button
-              className="btn btn-primary py-4 px-lg-5 d-none d-lg-block"
+              type="button"
+              className="btn btn-primary w-100 mt-3 d-lg-none mb-3"
               onClick={() =>
                 logout({ logoutParams: { returnTo: window.location.origin } })
               }
@@ -111,14 +115,37 @@ export default function Navbar() {
               Log out
             </button>
           ) : (
-            <Link
-              to="/login"
-              className="btn btn-primary py-4 px-lg-5 d-none d-lg-block"
+            <button
+              type="button"
+              className="btn btn-primary w-100 mt-3 d-lg-none mb-3"
+              disabled={isLoading}
+              onClick={() => loginWithRedirect()}
             >
               Join Now<i className="fa fa-arrow-right ms-3"></i>
-            </Link>
+            </button>
           )}
         </div>
+
+        {!isAuthenticated ? (
+          <button
+            type="button"
+            className="btn btn-primary navbar-cta-btn d-none d-lg-inline-flex"
+            disabled={isLoading}
+            onClick={() => loginWithRedirect()}
+          >
+            Join Now<i className="fa fa-arrow-right ms-3"></i>
+          </button>
+        ) : (
+          <button
+            type="button"
+            className="btn btn-primary navbar-cta-btn d-none d-lg-inline-flex"
+            onClick={() =>
+              logout({ logoutParams: { returnTo: window.location.origin } })
+            }
+          >
+            Log out
+          </button>
+        )}
       </nav>
     </>
   );

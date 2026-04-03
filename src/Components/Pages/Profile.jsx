@@ -17,6 +17,7 @@ import {
   MDBListGroupItem,
 } from "mdb-react-ui-kit";
 import { useAuth0 } from "@auth0/auth0-react";
+import { accessTokenSilentlyOpts } from "../../auth/accessTokenOptions.js";
 import Navbar from "./Navbar";
 import Footer from "./Footer";
 import axios from "axios";
@@ -31,7 +32,7 @@ export default function Profile() {
     const fetchProfile = async () => {
       if (isAuthenticated) {
         try {
-          const token = await getAccessTokenSilently();
+          const token = await getAccessTokenSilently(accessTokenSilentlyOpts());
           const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
           const response = await axios.get(`${API_URL}/api/user/profile`, {
             headers: { Authorization: `Bearer ${token}` },
@@ -95,7 +96,7 @@ export default function Profile() {
                         Full Stack Developer
                       </p>
                       <p className="text-muted mb-4">
-                        Chennai, Tamilnadu, India
+                      Kolkata, West Bengal, India
                       </p>
                       {/* <div className="d-flex justify-content-center mb-2">
                                                 <MDBBtn>Follow</MDBBtn>
@@ -109,7 +110,7 @@ export default function Profile() {
                       <MDBListGroup flush className="rounded-3">
                         <MDBListGroupItem className="d-flex justify-content-between align-items-center p-3">
                           <MDBIcon fas icon="globe fa-lg text-warning" />
-                          <MDBCardText>https://eLearining.com</MDBCardText>
+                          <MDBCardText>https://onlearny.com</MDBCardText>
                         </MDBListGroupItem>
                         <MDBListGroupItem className="d-flex justify-content-between align-items-center p-3">
                           <MDBIcon
@@ -117,7 +118,7 @@ export default function Profile() {
                             icon="github fa-lg"
                             style={{ color: "#333333" }}
                           />
-                          <MDBCardText>Tr.-goswami</MDBCardText>
+                          <MDBCardText>mimraj-ai1</MDBCardText>
                         </MDBListGroupItem>
                         <MDBListGroupItem className="d-flex justify-content-between align-items-center p-3">
                           <MDBIcon
@@ -125,7 +126,7 @@ export default function Profile() {
                             icon="twitter fa-lg"
                             style={{ color: "#55acee" }}
                           />
-                          <MDBCardText>@basantgoswmai_</MDBCardText>
+                          <MDBCardText>mimraj-ai1</MDBCardText>
                         </MDBListGroupItem>
                         <MDBListGroupItem className="d-flex justify-content-between align-items-center p-3">
                           <MDBIcon
@@ -133,7 +134,7 @@ export default function Profile() {
                             icon="instagram fa-lg"
                             style={{ color: "#ac2bac" }}
                           />
-                          <MDBCardText>Tr..bharati.54</MDBCardText>
+                          <MDBCardText>mimraj-ai1</MDBCardText>
                         </MDBListGroupItem>
                         <MDBListGroupItem className="d-flex justify-content-between align-items-center p-3">
                           <MDBIcon
@@ -141,7 +142,7 @@ export default function Profile() {
                             icon="facebook fa-lg"
                             style={{ color: "#3b5998" }}
                           />
-                          <MDBCardText>Tr. bharati</MDBCardText>
+                          <MDBCardText>mimraj-ai1</MDBCardText>
                         </MDBListGroupItem>
                       </MDBListGroup>
                     </MDBCardBody>
@@ -200,7 +201,7 @@ export default function Profile() {
                         </MDBCol>
                         <MDBCol sm="9">
                           <MDBCardText className="text-muted">
-                            Chennai, Tamilnadu, India
+                            Kolkata, West Bengal, India
                           </MDBCardText>
                         </MDBCol>
                       </MDBRow>
