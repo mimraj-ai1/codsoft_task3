@@ -4,6 +4,7 @@ const web3formsKey = import.meta.env.VITE_WEB3FORMS_ACCESS_KEY;
 
 export default function Footer() {
   const [result, setResult] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const onSubscribe = async (e) => {
     e.preventDefault();
@@ -11,7 +12,10 @@ export default function Footer() {
       setResult("Newsletter not configured.");
       return;
     }
-    setResult("Subscribing....");
+    
+    setIsSubmitting(true);
+    setResult("");
+    
     const formData = new FormData(e.target);
     formData.append("access_key", web3formsKey);
     formData.append("subject", "Welcome to OnLearny Newsletter!");
@@ -27,15 +31,18 @@ export default function Footer() {
       const data = await response.json();
 
       if (data.success) {
-        setResult("Subscribed Successfully! Check your email.");
+        setResult("✅ Subscribed! Check your email.");
+        alert("Success! Check your email for confirmation.");
         e.target.reset();
-        setTimeout(() => setResult(""), 5000);
+        setTimeout(() => setResult(""), 10000);
       } else {
         setResult(data.message);
       }
     } catch (err) {
       console.error(err);
-      setResult("Something went wrong. Please try again.");
+      setResult("An error occurred. Please try again.");
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -132,12 +139,18 @@ export default function Footer() {
                 />
                 <button
                   type="submit"
+                  disabled={isSubmitting}
                   className="btn btn-primary py-2 position-absolute top-0 end-0 mt-2 me-2"
                 >
-                  Subscribe
+                  {isSubmitting ? "Wait..." : "Subscribe"}
                 </button>
               </form>
-              <span className="text-primary small">{result}</span>
+              <div 
+                className={`mt-2 fw-bold text-${result.includes("✅") ? "success" : "primary"}`}
+                style={{ minHeight: "20px" }}
+              >
+                {result}
+              </div>
             </div>
           </div>
         </div>
