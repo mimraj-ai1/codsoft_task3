@@ -67,28 +67,18 @@ export default function FeedbackAll() {
 
       {/* feedback form */}
       <div className="container mt-4">
-        {!isAuthenticated ? (
-          <div className="row mt-4 wow fadeInUp" data-wow-delay="0.3s">
-             <div className="col-md-6 offset-md-3 text-center mb-5">
-              <h2>Give your Feedback</h2>
-              <p className="lead">You must be logged in to provide feedback.</p>
-              <button 
-                className="btn btn-primary px-5 py-3 mt-2" 
-                onClick={() => loginWithRedirect()}
-              >
-                Log In to Continue
-              </button>
-              <hr />
-            </div>
-          </div>
-        ) : (
-          <div className="row mt-4 wow fadeInUp" data-wow-delay="0.3s">
-            <h1 className="text-center">Give your Feedback</h1>
-            <form
-              className="col-md-6 offset-md-3 mb-4 wow fadeInUp"
-              onSubmit={async (e) => {
+        <div className="row mt-4 wow fadeInUp" data-wow-delay="0.3s">
+          <h1 className="text-center">Give your Feedback</h1>
+          <form
+            className="col-md-6 offset-md-3 mb-4 wow fadeInUp"
+            onSubmit={async (e) => {
               e.preventDefault();
               const form = e.target;
+              if (!isAuthenticated) {
+                alert("Please log in to post feedback.");
+                loginWithRedirect();
+                return;
+              }
               const body = {
                 name: form.name.value,
                 comment: form.comment.value,
@@ -126,7 +116,6 @@ export default function FeedbackAll() {
                 className="form-control"
                 id="feedbackName"
                 placeholder="John Deo"
-                defaultValue={user?.name}
                 required
               />
               <label htmlFor="feedbackName">Name</label>
@@ -149,7 +138,6 @@ export default function FeedbackAll() {
                 className="form-control"
                 id="feedbackImage"
                 placeholder="Enter Your Image URL"
-                defaultValue={user?.picture}
               />
               <label htmlFor="feedbackImage">Image Url</label>
             </div>
@@ -166,7 +154,6 @@ export default function FeedbackAll() {
             <hr />
           </form>
         </div>
-        )}
       </div>
 
       <div className="text-center wow fadeInUp" data-wow-delay="0.3s">
