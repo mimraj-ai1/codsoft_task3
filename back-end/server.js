@@ -16,6 +16,7 @@ const feedbackRoutes = require("./routes/feedbackRoutes");
 const userRoutes = require("./routes/userRoutes");
 
 const app = express();
+app.set("trust proxy", 1);
 const port = process.env.PORT || 3000;
 
 // Connect to Database
@@ -38,7 +39,8 @@ app.use(express.urlencoded({ extended: true }));
 const allowedOrigins = [
   "http://localhost:4110", // Local standard
   "http://localhost:5173", // Generic Vite
-  process.env.FRONTEND_CLIENT_URL // Deployed URL
+  "https://onlearny.vercel.app", // Deployed Production Frontend
+  process.env.FRONTEND_CLIENT_URL // Dynamic fallback from Render environment variables
 ];
 
 app.use(cors({
