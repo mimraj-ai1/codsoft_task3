@@ -8,13 +8,9 @@ export default function Footer() {
 
   const onSubscribe = async (e) => {
     e.preventDefault();
-    if (!web3formsKey) {
-      setResult("Newsletter not configured.");
-      return;
-    }
+    if (!web3formsKey) return;
     
     setIsSubmitting(true);
-    setResult("");
     
     const formData = new FormData(e.target);
     formData.append("access_key", web3formsKey);
@@ -31,16 +27,10 @@ export default function Footer() {
       const data = await response.json();
 
       if (data.success) {
-        setResult("✅ Subscribed! Check your email.");
-        alert("Success! Check your email for confirmation.");
         e.target.reset();
-        setTimeout(() => setResult(""), 10000);
-      } else {
-        setResult(data.message);
       }
     } catch (err) {
       console.error(err);
-      setResult("An error occurred. Please try again.");
     } finally {
       setIsSubmitting(false);
     }
@@ -145,12 +135,6 @@ export default function Footer() {
                   {isSubmitting ? "Wait..." : "Subscribe"}
                 </button>
               </form>
-              <div 
-                className={`mt-2 fw-bold text-${result.includes("✅") ? "success" : "primary"}`}
-                style={{ minHeight: "20px" }}
-              >
-                {result}
-              </div>
             </div>
           </div>
         </div>
