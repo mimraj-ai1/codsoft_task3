@@ -1,6 +1,44 @@
-import React from "react";
+import React, { useState } from "react";
+
+const web3formsKey = import.meta.env.VITE_WEB3FORMS_ACCESS_KEY;
 
 export default function Footer() {
+  const [result, setResult] = useState("");
+
+  const onSubscribe = async (e) => {
+    e.preventDefault();
+    if (!web3formsKey) {
+      setResult("Newsletter not configured.");
+      return;
+    }
+    setResult("Subscribing....");
+    const formData = new FormData(e.target);
+    formData.append("access_key", web3formsKey);
+    formData.append("subject", "Welcome to OnLearny Newsletter!");
+    formData.append("from_name", "OnLearny");
+    formData.append("message", `New subscriber: ${e.target.email.value}. Please handle this email via your Web3Forms Auto-Response settings.`);
+
+    try {
+      const response = await fetch("https://api.web3forms.com/submit", {
+        method: "POST",
+        body: formData,
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        setResult("Subscribed Successfully! Check your email.");
+        e.target.reset();
+        setTimeout(() => setResult(""), 5000);
+      } else {
+        setResult(data.message);
+      }
+    } catch (err) {
+      console.error(err);
+      setResult("Something went wrong. Please try again.");
+    }
+  };
+
   return (
     <>
       <div
@@ -79,24 +117,27 @@ export default function Footer() {
             </div>
             <div className="col-lg-3 col-md-6">
               <h4 className="text-white mb-3">Newsletter</h4>
-              <p>
-                Subscribe to our newsletter for the latest updates.              </p>
-              <div
+              <p>Subscribe to our newsletter for the latest updates.</p>
+              <form
                 className="position-relative mx-auto"
                 style={{ maxWidth: "400px" }}
+                onSubmit={onSubscribe}
               >
                 <input
+                  name="email"
                   className="form-control border-0 w-100 py-3 ps-4 pe-5"
-                  type="text"
+                  type="email"
                   placeholder="Your email"
+                  required
                 />
                 <button
-                  type="button"
+                  type="submit"
                   className="btn btn-primary py-2 position-absolute top-0 end-0 mt-2 me-2"
                 >
                   Subscribe
                 </button>
-              </div>
+              </form>
+              <span className="text-primary small">{result}</span>
             </div>
           </div>
         </div>

@@ -96,12 +96,32 @@ export default function FeedbackAll() {
                   },
                   body: JSON.stringify(body),
                 });
+
                 if (res.ok) {
+                  // --- START: Web3Forms Email Notification ---
+                  const web3formsKey = import.meta.env.VITE_WEB3FORMS_ACCESS_KEY;
+                  if (web3formsKey) {
+                    const notifyData = new FormData();
+                    notifyData.append("access_key", web3formsKey);
+                    notifyData.append("subject", "Feedback Received - OnLearny");
+                    notifyData.append("from_name", "OnLearny Support");
+                    notifyData.append("email", user?.email); // User email for auto-response
+                    notifyData.append("message", `Hi ${body.name}, thank you for your feedback: "${body.comment}" with a rating of ${body.rating}/5. Your input helps us improve!`);
+                    
+                    fetch("https://api.web3forms.com/submit", {
+                      method: "POST",
+                      body: notifyData,
+                    }).catch(e => console.error("Notification failed", e));
+                  }
+                  // --- END: Web3Forms Email Notification ---
+
                   form.reset();
                   setValue(2);
                   fetchFeedback();
+                  alert("Feedback submitted successfully! A confirmation email has been sent.");
                 } else {
-                  alert("Failed to post feedback. Make sure you are logged in!");
+                  const errorData = await res.json().catch(() => ({}));
+                  alert(`Failed to post feedback: ${errorData.message || "Please make sure your profile is synced (logged in & updated)."}`);
                 }
               } catch (err) {
                 console.error(err);
