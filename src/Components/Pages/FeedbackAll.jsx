@@ -12,7 +12,7 @@ const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:3000";
 export default function FeedbackAll() {
   const [value, setValue] = React.useState(2);
   const [feedbackData, setFeedbackData] = useState([]);
-  const { getAccessTokenSilently } = useAuth0();
+  const { getAccessTokenSilently, isAuthenticated, loginWithRedirect, user } = useAuth0();
 
   const fetchFeedback = React.useCallback(async () => {
     try {
@@ -67,11 +67,26 @@ export default function FeedbackAll() {
 
       {/* feedback form */}
       <div className="container mt-4">
-        <div className="row mt-4 wow fadeInUp" data-wow-delay="0.3s">
-          <h1 className="text-center">Give your Feedback</h1>
-          <form
-            className="col-md-6 offset-md-3 mb-4 wow fadeInUp"
-            onSubmit={async (e) => {
+        {!isAuthenticated ? (
+          <div className="row mt-4 wow fadeInUp" data-wow-delay="0.3s">
+             <div className="col-md-6 offset-md-3 text-center mb-5">
+              <h2>Give your Feedback</h2>
+              <p className="lead">You must be logged in to provide feedback.</p>
+              <button 
+                className="btn btn-primary px-5 py-3 mt-2" 
+                onClick={() => loginWithRedirect()}
+              >
+                Log In to Continue
+              </button>
+              <hr />
+            </div>
+          </div>
+        ) : (
+          <div className="row mt-4 wow fadeInUp" data-wow-delay="0.3s">
+            <h1 className="text-center">Give your Feedback</h1>
+            <form
+              className="col-md-6 offset-md-3 mb-4 wow fadeInUp"
+              onSubmit={async (e) => {
               e.preventDefault();
               const form = e.target;
               const body = {
@@ -111,6 +126,7 @@ export default function FeedbackAll() {
                 className="form-control"
                 id="feedbackName"
                 placeholder="John Deo"
+                defaultValue={user?.name}
                 required
               />
               <label htmlFor="feedbackName">Name</label>
@@ -133,6 +149,7 @@ export default function FeedbackAll() {
                 className="form-control"
                 id="feedbackImage"
                 placeholder="Enter Your Image URL"
+                defaultValue={user?.picture}
               />
               <label htmlFor="feedbackImage">Image Url</label>
             </div>
@@ -149,19 +166,18 @@ export default function FeedbackAll() {
             <hr />
           </form>
         </div>
+        )}
+      </div>
 
-        {/* All feedback  */}
-
-        <div className="text-center wow fadeInUp" data-wow-delay="0.3s">
-          <h6 className="section-title bg-white text-center text-primary px-3">
-            All Feedbacks of Users
-          </h6>
-          <h1 className="mb-5">All Feedbacks</h1>
-        </div>
+      <div className="text-center wow fadeInUp" data-wow-delay="0.3s">
+        <h6 className="section-title bg-white text-center text-primary px-3">
+          All Feedbacks of Users
+        </h6>
+        <h1 className="mb-5">All Feedbacks</h1>
       </div>
 
       <div className="row offset-md-2">
-        {feedbackData.map((feedback) => (
+        {Array.isArray(feedbackData) && feedbackData.map((feedback) => (
           <div
             key={feedback._id}
             className="col-md-5 ms-2 mt-3 card mb-3 pl-2 wow fadeInUp"

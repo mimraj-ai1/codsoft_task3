@@ -45,12 +45,23 @@ const allowedOrigins = [
 
 app.use(cors({
   origin: function (origin, callback) {
-    if (!origin || allowedOrigins.includes(origin)) {
+    if (!origin) return callback(null, true);
+    
+    const isAllowed = allowedOrigins.some(allowedOrigin => {
+      if (!allowedOrigin) return false;
+      const cleanOrigin = origin.replace(/\/$/, "");
+      const cleanAllowed = allowedOrigin.replace(/\/$/, "");
+      return cleanOrigin === cleanAllowed;
+    });
+
+    if (isAllowed) {
       callback(null, true);
     } else {
+      logger.warn(`CORS blocked for origin: ${origin}`);
       callback(new Error('Not allowed by CORS'));
     }
-  }
+  },
+  credentials: true
 }));
 
 // Mount Routes
