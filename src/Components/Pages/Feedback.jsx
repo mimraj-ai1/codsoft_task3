@@ -8,7 +8,7 @@ import { accessTokenSilentlyOpts } from "../../auth/accessTokenOptions.js";
 const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:3000";
 
 export default function Feedback() {
-  const { getAccessTokenSilently } = useAuth0();
+  const { getAccessTokenSilently, isAuthenticated, loginWithRedirect, user } = useAuth0();
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
