@@ -10,12 +10,16 @@ export default function ShowBook() {
   let [search, setSearch] = useState("");
   let [books, setbooks] = useState([]);
 
-  const apikey = "AIzaSyDju8-o99z7DuJcpwB0IL9jzrlyZHFr418";
-  const url = `https://www.googleapis.com/books/v1/volumes?q=${search}&key=${apikey}&maxResults=40`;
+  const apikey = import.meta.env.VITE_GOOGLE_BOOKS_API_KEY;
 
   // const url = `https://www.googleapis.com/books/v1/volumes?q=java&&key=${apikey}`;
 
   let getBooks = async () => {
+    if (!apikey) {
+      console.warn("Set VITE_GOOGLE_BOOKS_API_KEY in .env for book search.");
+      return;
+    }
+    const url = `https://www.googleapis.com/books/v1/volumes?q=${search}&key=${apikey}&maxResults=40`;
     try {
       // console.log("search value under main func "+search);
       let result = await fetch(url);

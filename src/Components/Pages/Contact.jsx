@@ -1,19 +1,34 @@
 import React from "react";
 import HCaptcha from "@hcaptcha/react-hcaptcha";
 
+const web3formsKey = import.meta.env.VITE_WEB3FORMS_ACCESS_KEY;
+const hcaptchaSiteKey = import.meta.env.VITE_HCAPTCHA_SITEKEY;
+
 export default function Contact() {
   const [result, setResult] = React.useState("");
+  const [captchaToken, setCaptchaToken] = React.useState(null);
 
   const onHCaptchaChange = (token) => {
-    setValue("h-captcha-response", token);
+    setCaptchaToken(token);
   };
 
   const onSubmit = async (event) => {
     event.preventDefault();
+    if (!web3formsKey) {
+      setResult("Contact form is not configured (missing VITE_WEB3FORMS_ACCESS_KEY).");
+      return;
+    }
+    if (hcaptchaSiteKey && !captchaToken) {
+      setResult("Please complete the captcha.");
+      return;
+    }
     setResult("Sending....");
     const formData = new FormData(event.target);
 
-    formData.append("access_key", "b6490c38-e796-4e42-8ad6-7c81aa5714ee");
+    formData.append("access_key", web3formsKey);
+    if (captchaToken) {
+      formData.set("h-captcha-response", captchaToken);
+    }
 
     const response = await fetch("https://api.web3forms.com/submit", {
       method: "POST",
@@ -24,6 +39,7 @@ export default function Contact() {
 
     if (data.success) {
       setResult("Form Submitted Successfully");
+      setCaptchaToken(null);
       event.target.reset();
     } else {
       console.log("Error", data);
@@ -155,11 +171,18 @@ export default function Contact() {
                     value="New Submission from contact page"
                   ></input>
                   <div className="col-8">
-                    <HCaptcha
-                      sitekey="50b2fe65-b00b-4b9e-ad62-3ba471098be2"
-                      reCaptchaCompat={false}
-                      onVerify={onHCaptchaChange}
-                    />
+                    {hcaptchaSiteKey ? (
+                      <HCaptcha
+                        sitekey={hcaptchaSiteKey}
+                        reCaptchaCompat={false}
+                        onVerify={onHCaptchaChange}
+                      />
+                    ) : (
+                      <p className="text-muted small mb-0">
+                        Add <code>VITE_HCAPTCHA_SITEKEY</code> to <code>.env</code>{" "}
+                        to enable captcha.
+                      </p>
+                    )}
                   </div>
                   <div className="col-12">
                     <button

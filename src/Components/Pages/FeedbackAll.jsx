@@ -7,7 +7,7 @@ import Typography from "@mui/material/Typography";
 import { useAuth0 } from "@auth0/auth0-react";
 import { accessTokenSilentlyOpts } from "../../auth/accessTokenOptions.js";
 
-const API_BASE = import.meta.env.VITE_API_BASE_URL || "http://localhost:3000";
+const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:3000";
 
 export default function FeedbackAll() {
   const [value, setValue] = React.useState(2);
