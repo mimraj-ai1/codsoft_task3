@@ -27,7 +27,7 @@ async function updateLoginPrompt() {
             body: JSON.stringify({
                 login: {
                     title: "Welcome to OnLearny",
-                    description: "Login to continue learning "
+                    description: "Sign up to continue learning."
                 }
             })
         });

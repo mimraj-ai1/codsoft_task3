@@ -5,7 +5,7 @@ const logger = require("../logger");
 const AUTH0_AUDIENCE = process.env.AUTH0_AUDIENCE || "https://onlearny-api.com";
 const AUTH0_ISSUER_BASE_URL =
   process.env.AUTH0_ISSUER_BASE_URL ||
-  "https://dev-5n62t1xjyicrdury.us.auth0.com/";
+  "https://dev-o87pab3dhngt55ct.us.auth0.com/";
 
 // ─── Auth0 JWT Middleware ────────────────────────────────────────────────────────
 const verifyToken = auth({

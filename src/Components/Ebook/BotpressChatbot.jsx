@@ -22,7 +22,7 @@ const BotpressChatbot = () => {
           },
           configuration: {
             botName: "OnLearny Smart Assistant",
-            botDescription: "Your AI Mentor for Courses, Quizzes, and Library search.",
+            // botDescription: "Your AI Mentor for Courses, Quizzes, and Library search.",
             composerPlaceholder: "Ask me about MERN stack, Java, or DSA...",
           }
         });
