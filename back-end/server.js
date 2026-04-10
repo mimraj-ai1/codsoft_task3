@@ -45,7 +45,12 @@ const allowedOrigins = [
 
 app.use(cors({
   origin: function (origin, callback) {
-    if (!origin) return callback(null, true);
+    if (!origin) {
+      if (process.env.NODE_ENV === 'development' || !process.env.NODE_ENV) {
+        return callback(null, true);
+      }
+      return callback(null, true); // Allow non-browser requests by default for now
+    }
     
     const isAllowed = allowedOrigins.some(allowedOrigin => {
       if (!allowedOrigin) return false;

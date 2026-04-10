@@ -21,7 +21,7 @@ export default function Home() {
             <Team/>
             <Testimonial/>
             <Footer/>  
-            <a href="#" className="btn btn-primary back-to-top"><i className="bi bi-arrow-up"></i></a>
+            {/* <a href="#" className="btn btn-primary back-to-top"><i className="bi bi-arrow-up"></i></a> */}
         </>
     )
 }

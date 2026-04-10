@@ -12,11 +12,20 @@ const BotpressChatbot = () => {
     script.async = true;
     
     script.onload = () => {
-      if (window.botpress) {
         window.botpress.init({
           configUrl: WEBCHAT_CONFIG_URL,
+          botId: "f7419460-d96a-4016-b8f9-6329c370b4cf", // Extracted from config
+          clientId: "60e5b52d-4cee-42da-8aa4-ffd54747176e", // Extracted from config
+          userData: {
+            platform: "OnLearny",
+            categories: ["Java", "FullStack", "MERN", "DSA", "Database", "WebDev"]
+          },
+          configuration: {
+            botName: "OnLearny Smart Assistant",
+            botDescription: "Your AI Mentor for Courses, Quizzes, and Library search.",
+            composerPlaceholder: "Ask me about MERN stack, Java, or DSA...",
+          }
         });
-      }
     };
 
     document.body.appendChild(script);

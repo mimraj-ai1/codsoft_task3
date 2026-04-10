@@ -30,7 +30,13 @@ export default function UserSync() {
           );
           console.log("User synced successfully with the database.");
         } catch (error) {
-          console.error("Failed to sync user to database:", error);
+          const status = error.response?.status;
+          const message = error.response?.data?.message || error.message;
+          console.error(`Failed to sync user (${status}):`, message);
+          
+          if (status === 401) {
+            console.warn("Hint: Check if VITE_AUTH0_AUDIENCE is set in .env and matches backend.");
+          }
         }
       }
     };
