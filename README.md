@@ -89,7 +89,7 @@ Many learners struggle with fragmented resources across multiple platforms.
 
 ### 1️⃣ Clone Repository
 ```bash
-git clone https://github.com/Mimcoder03/sekhm.git
+git clone https://github.com/mimraj-ai1/onlearny-learning-platform.git
 cd OnLearny
 ```
 
@@ -155,19 +155,26 @@ npm run dev
 
 ```text
 OnLearny/
-├── back-end/
-│   ├── models/
-│   ├── routes/
-│   ├── controllers/
-│   ├── middleware/
-│   └── index.js
+├── back-end/               # Express backend application
+│   ├── controllers/        # Route handler functions
+│   ├── middleware/         # Custom middlewares (e.g., Auth0)
+│   ├── models/             # Mongoose database models
+│   ├── routes/             # API endpoint definitions
+│   └── index.js            # Entry point for backend server
 │
-├── src/
-│   ├── Components/
-│   ├── Pages/
-│   ├── auth/
-│   ├── App.jsx
-│   └── main.jsx
+├── src/                    # Frontend React source files
+│   ├── assets/             # Static assets (images, CSS)
+│   ├── auth/               # Auth0 configuration and helpers
+│   ├── Components/         # Reusable React components
+│   │   ├── Auth/           # Login/Registration components
+│   │   ├── Course/         # UI for course pages
+│   │   ├── Ebook/          # E-book library components
+│   │   ├── Layout/         # Shared layouts (Navbar, Footer)
+│   │   ├── Pages/          # Main application page views
+│   │   └── Quiz/           # Interactive quiz components
+│   ├── data/               # Static dataset constants
+│   ├── App.jsx             # Main App root component
+│   └── main.jsx            # React rendering entry point
 ```
 
 ---
@@ -211,7 +218,7 @@ Feel free to fork this repo and submit a pull request.
 **Shaikh Mimraj**
 
 * 💼 Software Engineer (Student)
-* 🌐 GitHub: [https://github.com/Mimcoder03](https://github.com/Mimcoder03)
+* 🌐 GitHub: [https://github.com/mimraj-ai1](https://github.com/mimraj-ai1) 
 
 ---
 
