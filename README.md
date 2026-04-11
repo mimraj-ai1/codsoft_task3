@@ -75,16 +75,6 @@ Many learners struggle with fragmented resources across multiple platforms.
 
 ---
 
-## 📸 Screenshots
-
-> *(Create a `screenshots` folder and add your images there)*
-
-![Home Page](./screenshots/home.png)
-![Dashboard](./screenshots/dashboard.png)
-![Quiz Feature](./screenshots/quiz.png)
-
----
-
 ## ⚙️ Installation & Setup
 
 ### 1️⃣ Clone Repository
@@ -215,9 +205,9 @@ Feel free to fork this repo and submit a pull request.
 
 ## 🧑‍💻 Author
 
-**Shaikh Mimraj**
+**SK Mimraj**
 
-* 💼 Software Engineer (Student)
+* 💼 Software Engineer
 * 🌐 GitHub: [https://github.com/mimraj-ai1](https://github.com/mimraj-ai1) 
 
 ---
