@@ -16,6 +16,7 @@
 
 ## 🌐 Live Demo
 👉 **[https://onlearny.vercel.app/](https://onlearny.vercel.app/)**
+[![Website Link](https://img.shields.io/badge/Visit-OnLearny-blue)](https://onlearny.vercel.app/)
 
 ---
 
