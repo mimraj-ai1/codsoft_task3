@@ -1,16 +1,11 @@
-Here’s your **🔥 top-tier GitHub README.md** — optimized for **recruiters, GitHub visibility, and professionalism**. Just copy-paste this into your `README.md` 👇
-
----
-
-```md
 # 🚀 OnLearny – Full Stack eLearning Platform
 
 <p align="center">
-  <img src="https://img.shields.io/badge/Frontend-React-blue?style=for-the-badge" />
-  <img src="https://img.shields.io/badge/Backend-Node.js-green?style=for-the-badge" />
-  <img src="https://img.shields.io/badge/Database-MongoDB-brightgreen?style=for-the-badge" />
-  <img src="https://img.shields.io/badge/Auth-Auth0-orange?style=for-the-badge" />
-  <img src="https://img.shields.io/badge/Deployed-Vercel-black?style=for-the-badge" />
+  <img src="https://img.shields.io/badge/Frontend-React-blue?style=for-the-badge" alt="Frontend: React" />
+  <img src="https://img.shields.io/badge/Backend-Node.js-green?style=for-the-badge" alt="Backend: Node.js" />
+  <img src="https://img.shields.io/badge/Database-MongoDB-brightgreen?style=for-the-badge" alt="Database: MongoDB" />
+  <img src="https://img.shields.io/badge/Auth-Auth0-orange?style=for-the-badge" alt="Auth: Auth0" />
+  <img src="https://img.shields.io/badge/Deployed-Vercel-black?style=for-the-badge" alt="Deployed: Vercel" />
 </p>
 
 <p align="center">
@@ -20,7 +15,7 @@ Here’s your **🔥 top-tier GitHub README.md** — optimized for **recruiters,
 ---
 
 ## 🌐 Live Demo
-👉 https://onlearny.vercel.app/
+👉 **[https://onlearny.vercel.app/](https://onlearny.vercel.app/)**
 
 ---
 
@@ -82,15 +77,11 @@ Many learners struggle with fragmented resources across multiple platforms.
 
 ## 📸 Screenshots
 
-> *(Add your screenshots here)*
+> *(Create a `screenshots` folder and add your images there)*
 
-```
-
-/screenshots/home.png
-/screenshots/dashboard.png
-/screenshots/quiz.png
-
-````
+![Home Page](./screenshots/home.png)
+![Dashboard](./screenshots/dashboard.png)
+![Quiz Feature](./screenshots/quiz.png)
 
 ---
 
@@ -100,7 +91,7 @@ Many learners struggle with fragmented resources across multiple platforms.
 ```bash
 git clone https://github.com/Mimcoder03/sekhm.git
 cd OnLearny
-````
+```
 
 ---
 
@@ -128,7 +119,7 @@ npm install
 ```env
 VITE_AUTH0_DOMAIN=your_domain
 VITE_AUTH0_CLIENT_ID=your_client_id
-VITE_AUTH0_AUDIENCE=your_api
+VITE_AUTH0_AUDIENCE=your_api_audience
 VITE_API_URL=http://localhost:5000
 ```
 
@@ -138,7 +129,7 @@ VITE_API_URL=http://localhost:5000
 PORT=5000
 MONGO_URI=your_mongodb_uri
 AUTH0_DOMAIN=your_domain
-AUTH0_AUDIENCE=your_api
+AUTH0_AUDIENCE=your_api_audience
 ```
 
 ---
@@ -162,7 +153,7 @@ npm run dev
 
 ## 📂 Project Structure
 
-```
+```text
 OnLearny/
 ├── back-end/
 │   ├── models/
@@ -227,6 +218,3 @@ Feel free to fork this repo and submit a pull request.
 ## 📄 License
 
 This project is licensed under the MIT License.
-
----
-
