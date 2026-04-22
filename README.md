@@ -1,6 +1,7 @@
 # 🚀 OnLearny – Full Stack eLearning Platform
 
 <p align="center">
+  <img src="https://img.shields.io/badge/Project-Internship-blueviolet?style=for-the-badge" alt="Project: Internship" />
   <img src="https://img.shields.io/badge/Frontend-React-blue?style=for-the-badge" alt="Frontend: React" />
   <img src="https://img.shields.io/badge/Backend-Node.js-green?style=for-the-badge" alt="Backend: Node.js" />
   <img src="https://img.shields.io/badge/Database-MongoDB-brightgreen?style=for-the-badge" alt="Database: MongoDB" />
@@ -16,6 +17,11 @@
 
 ## 🌐 Live 
 👉 **[https://onlearny.vercel.app/](https://onlearny.vercel.app/)**
+
+---
+
+## 🎓 Internship Project
+This repository contains the source code for an advanced full-stack eLearning platform, built as part of an official **Software Engineering Internship** project. It showcases practical experience in frontend and backend development, secure user authentication, database management, and AI chatbot integration.
 
 ---
 
