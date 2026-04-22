@@ -1,4 +1,5 @@
-import React from 'react'
+import React from 'react';
+import ReactPlayer from 'react-player';
 
 export default function Coursecart({ link, title, desc, isCompleted, onComplete, isEnrolled}) {
 
@@ -7,10 +8,7 @@ export default function Coursecart({ link, title, desc, isCompleted, onComplete,
             <div className="col-lg-4 col-md-6 wow fadeInUp">
                 <div className="course-item bg-light text-center">
                     <div className="position-relative overflow-hidden">
-                        <video width="360" height="240" controls>
-                            <source src={link} type="video/mp4" />
-                            Your browser does not support the video tag.
-                        </video>
+                        <ReactPlayer url={link} controls width="100%" height="240px" />
                     </div>
                     <div className="text-center p-4">
                         <h3 className="mb-0">{title}</h3>
