@@ -505,9 +505,7 @@ function CourseActivityChart({ enrolledCourses }) {
 }
 
 /* ─── VIEW: DASHBOARD ────────────────────────────────────────── */
-
-
-function DashboardView({ user, userProfile, enrolledCourses, certCount, setActiveSb }) {
+function DashboardView({ user, userProfile, enrolledCourses, certCount, setActiveSb, quizzesTaken }) {
   const firstName = user?.name?.split(" ")[0] || "Learner";
   const enrolledCount = enrolledCourses.length;
 
@@ -554,7 +552,7 @@ function DashboardView({ user, userProfile, enrolledCourses, certCount, setActiv
         </div>
         <div className="pf-stat-card">
           <div className="pf-stat-top"><div className="pf-stat-icon" style={{ background: "#FEF9C3" }}>🧠</div><span className="pf-stat-badge pf-badge-na">{QUIZ_TOPICS.length} topics</span></div>
-          <div className="pf-stat-val">0</div>
+          <div className="pf-stat-val">{quizzesTaken}</div>
           <div className="pf-stat-lbl">Quizzes Taken</div>
           <div className="pf-stat-sub">HTML · CSS · JS · React · DSA</div>
         </div>
@@ -762,7 +760,7 @@ function CoursesView({ enrolledCourses }) {
 }
 
 /* ─── VIEW: QUIZZES ──────────────────────────────────────────── */
-function QuizzesView() {
+function QuizzesView({ setQuizzesTaken }) {
   const [active, setActive] = React.useState(null);   // key of active quiz
   const [current, setCurrent] = React.useState(0);
   const [selected, setSelected] = React.useState(null);
@@ -833,7 +831,14 @@ function QuizzesView() {
                 const newAns = [...answers, selected];
                 setAnswers(newAns);
                 setSelected(null);
-                if (current + 1 >= qs.length) setFinished(true);
+                if (current + 1 >= qs.length) {
+                  setFinished(true);
+                  setQuizzesTaken(prev => {
+                    const newCount = prev + 1;
+                    localStorage.setItem("quizzesTaken", newCount);
+                    return newCount;
+                  });
+                }
                 else setCurrent(c => c+1);
               }}
               style={{ background:selected===null?"#E8EDF8":"#0D9488", color:selected===null?"#94A3B8":"#fff", border:"none", padding:"10px 24px", borderRadius:9, fontWeight:700, fontSize:"0.82rem", cursor:selected===null?"not-allowed":"pointer", fontFamily:"inherit", transition:"all 0.2s" }}>
@@ -1138,6 +1143,10 @@ export default function Profile() {
   const { user, isAuthenticated, isLoading, getIdTokenClaims } = useAuth0();
   const [userProfile, setUserProfile] = React.useState(null);
   const [activeSb, setActiveSb] = useState("dashboard");
+  const [quizzesTaken, setQuizzesTaken] = React.useState(() => {
+    const saved = localStorage.getItem("quizzesTaken");
+    return saved ? parseInt(saved, 10) : 0;
+  });
 
   React.useEffect(() => {
     const fetchProfile = async () => {
@@ -1187,15 +1196,15 @@ export default function Profile() {
   const renderView = () => {
     switch (activeSb) {
       case "profile":   return <ProfileInfoView user={user} enrolledCourses={enrolledCourses} />;
-      case "dashboard": return <DashboardView user={user} userProfile={userProfile} enrolledCourses={enrolledCourses} certCount={certCount} setActiveSb={setActiveSb} />;
+      case "dashboard": return <DashboardView user={user} userProfile={userProfile} enrolledCourses={enrolledCourses} certCount={certCount} setActiveSb={setActiveSb} quizzesTaken={quizzesTaken} />;
       case "learning": return <MyLearningView userProfile={userProfile} enrolledCourses={enrolledCourses} setActiveSb={setActiveSb} />;
       case "courses": return <CoursesView enrolledCourses={enrolledCourses} />;
-      case "quizzes":  return <QuizzesView />;
+      case "quizzes":  return <QuizzesView setQuizzesTaken={setQuizzesTaken} />;
       case "ebooks":   return <EBooksView />;
 
       case "activity": return <ActivityPageView enrolledCourses={enrolledCourses} userProfile={userProfile} />;
       case "feedback": return <FeedbackView />;
-      default: return <DashboardView user={user} userProfile={userProfile} enrolledCourses={enrolledCourses} certCount={certCount} setActiveSb={setActiveSb} />;
+      default: return <DashboardView user={user} userProfile={userProfile} enrolledCourses={enrolledCourses} certCount={certCount} setActiveSb={setActiveSb} quizzesTaken={quizzesTaken} />;
     }
   };
 

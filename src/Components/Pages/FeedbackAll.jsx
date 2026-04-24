@@ -7,7 +7,7 @@ import Typography from "@mui/material/Typography";
 import { useAuth0 } from "@auth0/auth0-react";
 import { getIdToken } from "../../auth/accessTokenOptions.js";
 
-const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:3000";
+const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:5000";
 
 export default function FeedbackAll() {
   const [value, setValue] = React.useState(2);
@@ -118,7 +118,7 @@ export default function FeedbackAll() {
                   form.reset();
                   setValue(2);
                   fetchFeedback();
-                  alert("Feedback submitted successfully! A confirmation email has been sent.");
+                  alert("Feedback submitted successfully.");
                 } else {
                   const errorData = await res.json().catch(() => ({}));
                   alert(`Failed to post feedback: ${errorData.message || "Please make sure your profile is synced (logged in & updated)."}`);
@@ -176,55 +176,7 @@ export default function FeedbackAll() {
         </div>
       </div>
 
-      <div className="text-center wow fadeInUp" data-wow-delay="0.3s">
-        <h6 className="section-title bg-white text-center text-primary px-3">
-          All Feedbacks of Users
-        </h6>
-        <h1 className="mb-5">All Feedbacks</h1>
-      </div>
 
-      <div className="row offset-md-2">
-        {Array.isArray(feedbackData) && feedbackData.map((feedback) => (
-          <div
-            key={feedback._id}
-            className="col-md-5 ms-2 mt-3 card mb-3 pl-2 wow fadeInUp"
-            style={{ maxWidth: "540px" }}
-            data-wow-delay="0.3s"
-          >
-            <button
-              type="button"
-              className="btn btn-link p-0 position-absolute top-0 end-0 text-danger"
-              style={{ cursor: "pointer" }}
-              onClick={() => handleDelete(feedback._id)}
-              aria-label="Delete feedback"
-            >
-              <span className="material-symbols-outlined">close</span>
-            </button>
-            <div className="row g-0">
-              <div className="col-md-3 mt-3">
-                <img
-                  style={{ width: "6rem", height: "6rem" }}
-                  src={feedback.image}
-                  className="d-block border rounded-circle p-2 mx-auto mb-3"
-                  alt=""
-                />
-              </div>
-              <div className="col-md-8">
-                <p className="card-text mb-0 ps-3">
-                  <small className="text-body-secondary">
-                    {formatDate(new Date(feedback.date))}
-                  </small>
-                </p>
-                <div className="card-body pt-0 mt-0">
-                  <p className="card-text p-0 fw-bold">{feedback.name}</p>
-                  <p className="card-text">{feedback.comment}</p>
-                  <Rating name="read-only" value={feedback.rating} readOnly />
-                </div>
-              </div>
-            </div>
-          </div>
-        ))}
-      </div>
 
       <Footer />
     </>

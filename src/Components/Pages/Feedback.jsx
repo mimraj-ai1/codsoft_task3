@@ -5,7 +5,7 @@ import { useAuth0 } from "@auth0/auth0-react";
 import { useNavigate } from "react-router-dom";
 import { getIdToken } from "../../auth/accessTokenOptions.js";
 
-const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:3000";
+const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:5000";
 
 export default function Feedback() {
   const { getIdTokenClaims, isAuthenticated, loginWithRedirect, user } = useAuth0();
