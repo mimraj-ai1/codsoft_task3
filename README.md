@@ -1,4 +1,4 @@
-# 🚀 OnLearny – Full Stack eLearning Platform
+#  OnLearny – Full Stack eLearning Website
 
 <p align="center">
   <img src="https://img.shields.io/badge/Project-Internship-blueviolet?style=for-the-badge" alt="Project: Internship" />
@@ -18,16 +18,6 @@
 ## 🌐 Live 
 👉 **[https://onlearny.vercel.app/](https://onlearny.vercel.app/)**
 
----
-
-## 🎓 Internship Project
-This repository contains the source code for an advanced full-stack eLearning platform, built as part of an official **Software Engineering Internship** project. It showcases practical experience in frontend and backend development, secure user authentication, database management, and AI chatbot integration.
-
----
-
-## 🎯 Problem Statement
-Many learners struggle with fragmented resources across multiple platforms.  
-**OnLearny** solves this by providing a **centralized, interactive learning system** with courses, quizzes, and AI guidance in one place.
 
 ---
 
@@ -81,72 +71,6 @@ Many learners struggle with fragmented resources across multiple platforms.
 
 ---
 
-## ⚙️ Installation & Setup
-
-### 1️⃣ Clone Repository
-```bash
-git clone https://github.com/mimraj-ai1/onlearny-learning-platform.git
-cd OnLearny
-```
-
----
-
-### 2️⃣ Install Dependencies
-
-#### Frontend
-
-```bash
-npm install
-```
-
-#### Backend
-
-```bash
-cd back-end
-npm install
-```
-
----
-
-### 3️⃣ Environment Variables
-
-#### Frontend `.env`
-
-```env
-VITE_AUTH0_DOMAIN=your_domain
-VITE_AUTH0_CLIENT_ID=your_client_id
-VITE_AUTH0_AUDIENCE=your_api_audience
-VITE_API_URL=http://localhost:5000
-```
-
-#### Backend `.env`
-
-```env
-PORT=5000
-MONGO_URI=your_mongodb_uri
-AUTH0_DOMAIN=your_domain
-AUTH0_AUDIENCE=your_api_audience
-```
-
----
-
-### 4️⃣ Run Application
-
-#### Start Backend
-
-```bash
-cd back-end
-npm run dev
-```
-
-#### Start Frontend
-
-```bash
-npm run dev
-```
-
----
-
 ## 📂 Project Structure
 
 ```text
@@ -175,49 +99,10 @@ OnLearny/
 
 ---
 
-## 🔐 Security Practices
-
-* JWT validation using Auth0
-* Protected API routes
-* CORS enabled
-* Environment variables for sensitive data
-
----
-
-## 📊 Project Highlights
-
-* ⚡ Built using modern full-stack architecture
-* 🔐 Industry-level authentication (Auth0)
-* 🤖 Integrated AI chatbot for user assistance
-* 🌍 Deployed on production (Vercel + Render)
-
----
-
-## 🚀 Future Enhancements
-
-* 📊 Learning analytics dashboard
-* 🧠 AI-based course recommendations
-* 📈 Progress tracking system
-* 🧩 DSA roadmap integration
-
----
-
-## 🤝 Contributing
-
-Contributions are welcome!
-Feel free to fork this repo and submit a pull request.
-
----
-
-## 🧑‍💻 Author
+## 🧑‍💻 Developer
 
 **SK Mimraj**
 
-* 💼 Software Engineer
-* 🌐 GitHub: [https://github.com/mimraj-ai1](https://github.com/mimraj-ai1) 
+* 🎓 Final Year IT Student 
+* 🌐 
 
----
-
-## 📄 License
-
-This project is licensed under the MIT License.
