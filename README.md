@@ -10,7 +10,7 @@
 </p>
 
 <p align="center">
-  <b>A modern full-stack learning platform with courses, quizzes, and AI assistance</b>
+  <b>A modern full-stack elearning platform with courses, quizzes, and AI assistance</b>
 </p>
 
 ---
