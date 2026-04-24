@@ -3,12 +3,12 @@ import Navbar from "./Navbar";
 import Footer from "./Footer";
 import { useAuth0 } from "@auth0/auth0-react";
 import { useNavigate } from "react-router-dom";
-import { accessTokenSilentlyOpts } from "../../auth/accessTokenOptions.js";
+import { getIdToken } from "../../auth/accessTokenOptions.js";
 
 const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:3000";
 
 export default function Feedback() {
-  const { getAccessTokenSilently, isAuthenticated, loginWithRedirect, user } = useAuth0();
+  const { getIdTokenClaims, isAuthenticated, loginWithRedirect, user } = useAuth0();
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
@@ -31,7 +31,7 @@ export default function Feedback() {
     };
 
     try {
-      const token = await getAccessTokenSilently(accessTokenSilentlyOpts());
+      const token = await getIdToken(getIdTokenClaims);
       const res = await fetch(`${API_BASE}/feedback/new`, {
         method: "POST",
         headers: { 

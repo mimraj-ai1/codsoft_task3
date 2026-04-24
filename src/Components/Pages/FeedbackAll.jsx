@@ -5,14 +5,14 @@ import Header from "./Header";
 import Rating from "@mui/material/Rating";
 import Typography from "@mui/material/Typography";
 import { useAuth0 } from "@auth0/auth0-react";
-import { accessTokenSilentlyOpts } from "../../auth/accessTokenOptions.js";
+import { getIdToken } from "../../auth/accessTokenOptions.js";
 
 const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:3000";
 
 export default function FeedbackAll() {
   const [value, setValue] = React.useState(2);
   const [feedbackData, setFeedbackData] = useState([]);
-  const { getAccessTokenSilently, isAuthenticated, loginWithRedirect, user } = useAuth0();
+  const { getIdTokenClaims, isAuthenticated, loginWithRedirect, user } = useAuth0();
 
   const fetchFeedback = React.useCallback(async () => {
     try {
@@ -30,7 +30,7 @@ export default function FeedbackAll() {
 
   const handleDelete = async (id) => {
     try {
-      const token = await getAccessTokenSilently(accessTokenSilentlyOpts());
+      const token = await getIdToken(getIdTokenClaims);
       const res = await fetch(`${API_BASE}/feedback/${id}`, { 
         method: "DELETE",
         headers: {
@@ -87,7 +87,7 @@ export default function FeedbackAll() {
                 date: new Date().toISOString(),
               };
               try {
-                const token = await getAccessTokenSilently(accessTokenSilentlyOpts());
+                const token = await getIdToken(getIdTokenClaims);
                 const res = await fetch(`${API_BASE}/feedback/new`, {
                   method: "POST",
                   headers: { 

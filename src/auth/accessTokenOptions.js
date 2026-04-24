@@ -1,14 +1,26 @@
 /**
- * Optional API audience. Leave unset in .env until Auth0 → APIs defines the same identifier.
- * Login works without it; backend /sync-user needs a matching API + audience when you enable it.
+ * Auth token helpers.
+ *
+ * We use the Auth0 ID token (via getIdTokenClaims) instead of an
+ * access token so that no API audience needs to be registered in
+ * the Auth0 dashboard.  The backend verifies the ID token using
+ * the same JWKS endpoint — it just checks aud === CLIENT_ID.
  */
-export function getAuth0ApiAudience() {
-  const v = import.meta.env.VITE_AUTH0_AUDIENCE;
-  if (v === '' || v === undefined) return undefined;
-  return v;
+
+/**
+ * Call this in any component to get the raw ID token JWT string.
+ * Usage:
+ *   const { getIdTokenClaims } = useAuth0();
+ *   const token = await getIdToken(getIdTokenClaims);
+ */
+export async function getIdToken(getIdTokenClaims) {
+  // Pass ignoreCache: true so Auth0 always returns a fresh token,
+  // preventing "jwt expired" errors when the cached token has expired.
+  const claims = await getIdTokenClaims({ ignoreCache: true });
+  if (!claims?.__raw) throw new Error("ID token not available");
+  return claims.__raw;
 }
 
-export function accessTokenSilentlyOpts() {
-  const audience = getAuth0ApiAudience();
-  return audience ? { authorizationParams: { audience } } : {};
-}
+// Legacy export kept so old imports don't break at compile time.
+export function accessTokenSilentlyOpts() { return {}; }
+export function getAuth0ApiAudience() { return undefined; }

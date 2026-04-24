@@ -1,17 +1,17 @@
 import { useEffect } from "react";
 import { useAuth0 } from "@auth0/auth0-react";
 import axios from "axios";
-import { accessTokenSilentlyOpts } from "../../auth/accessTokenOptions.js";
+import { getIdToken } from "../../auth/accessTokenOptions.js";
 
 export default function UserSync() {
-  const { isAuthenticated, user, getAccessTokenSilently } = useAuth0();
+  const { isAuthenticated, user, getIdTokenClaims } = useAuth0();
 
   useEffect(() => {
     const syncUserToDatabase = async () => {
       if (isAuthenticated && user) {
         try {
           // Get the secure token for the backend API
-          const token = await getAccessTokenSilently(accessTokenSilentlyOpts());
+          const token = await getIdToken(getIdTokenClaims);
 
           // Hit the sync endpoint with email and name
           const apiBase =
@@ -42,7 +42,7 @@ export default function UserSync() {
     };
 
     syncUserToDatabase();
-  }, [isAuthenticated, user, getAccessTokenSilently]);
+  }, [isAuthenticated, user, getIdTokenClaims]);
 
   return null; // This component runs silently in the background
 }

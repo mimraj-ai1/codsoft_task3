@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useAuth0 } from "@auth0/auth0-react";
-import { accessTokenSilentlyOpts } from "../../auth/accessTokenOptions.js";
+import { getIdToken } from "../../auth/accessTokenOptions.js";
 import Navbar from "./Navbar";
 import Footer from "./Footer";
 import axios from "axios";
@@ -23,18 +23,85 @@ const PLATFORM_COURSES = [
 ];
 
 const EBOOKS = [
-  { title: "JavaScript: The Good Parts", author: "Douglas Crockford", icon: "📘", pages: 172 },
-  { title: "You Don't Know JS", author: "Kyle Simpson", icon: "📗", pages: 280 },
-  { title: "Clean Code", author: "Robert C. Martin", icon: "📙", pages: 464 },
-  { title: "The Pragmatic Programmer", author: "Hunt & Thomas", icon: "📕", pages: 352 },
+  { title: "Eloquent JavaScript", author: "Marijn Haverbeke", icon: "📘", pages: 472, url: "https://eloquentjavascript.net/", tag: "Free" },
+  { title: "You Don't Know JS", author: "Kyle Simpson", icon: "📗", pages: 280, url: "https://github.com/getify/You-Dont-Know-JS", tag: "Free" },
+  { title: "The Modern JavaScript Tutorial", author: "javascript.info", icon: "⚡", pages: 500, url: "https://javascript.info/", tag: "Free" },
+  { title: "React Docs (Official)", author: "Meta / React Team", icon: "⚛️", pages: 300, url: "https://react.dev/learn", tag: "Free" },
+  { title: "Node.js Docs & Guides", author: "OpenJS Foundation", icon: "🟢", pages: 200, url: "https://nodejs.org/en/docs/guides", tag: "Free" },
+  { title: "MongoDB Manual", author: "MongoDB Inc.", icon: "🍃", pages: 400, url: "https://www.mongodb.com/docs/manual/", tag: "Free" },
+  { title: "CSS: The Definitive Guide", author: "MDN Web Docs", icon: "🎨", pages: 350, url: "https://developer.mozilla.org/en-US/docs/Web/CSS", tag: "Free" },
+  { title: "Pro Git Book", author: "Scott Chacon", icon: "📕", pages: 574, url: "https://git-scm.com/book/en/v2", tag: "Free" },
 ];
 
+const QUIZ_BANK = {
+  html: [
+    { q: "What does HTML stand for?", opts: ["HyperText Markup Language","HighText Machine Language","HyperText Machine Language","HyperText Markup Level"], ans: 0 },
+    { q: "Which tag creates a hyperlink?", opts: ["<link>","<a>","<href>","<url>"], ans: 1 },
+    { q: "Which tag is used for the largest heading?", opts: ["<h6>","<head>","<h1>","<h0>"], ans: 2 },
+    { q: "Which attribute specifies an image URL?", opts: ["href","link","src","url"], ans: 2 },
+    { q: "What does the <br> tag do?", opts: ["Bold text","Line break","Border","Background"], ans: 1 },
+    { q: "Which HTML element defines the document body?", opts: ["<main>","<section>","<body>","<content>"], ans: 2 },
+    { q: "Which input type creates a checkbox?", opts: ["type=\"check\"","type=\"checkbox\"","type=\"tick\"","type=\"box\""], ans: 1 },
+    { q: "How do you add a comment in HTML?", opts: ["// comment","/* comment */","<!-- comment -->","## comment"], ans: 2 },
+    { q: "Which tag creates an ordered list?", opts: ["<ul>","<li>","<list>","<ol>"], ans: 3 },
+    { q: "What is the correct HTML for a table row?", opts: ["<row>","<td>","<tr>","<th>"], ans: 2 },
+  ],
+  css: [
+    { q: "What does CSS stand for?", opts: ["Cascading Style Sheets","Creative Style System","Computer Style Sheets","Colorful Style Sheets"], ans: 0 },
+    { q: "Which property changes text color?", opts: ["font-color","text-color","color","foreground"], ans: 2 },
+    { q: "How do you select an element with id='demo'?", opts: [".demo","#demo","*demo","demo"], ans: 1 },
+    { q: "Which property adds space inside an element's border?", opts: ["margin","spacing","padding","border-space"], ans: 2 },
+    { q: "Which value makes an element invisible but still takes space?", opts: ["display:none","visibility:hidden","opacity:0","hidden:true"], ans: 1 },
+    { q: "How do you make text bold in CSS?", opts: ["font-weight:bold","text-bold:yes","font-style:bold","text-weight:bold"], ans: 0 },
+    { q: "Which CSS property controls the text size?", opts: ["font-size","text-size","font-style","text-scale"], ans: 0 },
+    { q: "What is the default position value in CSS?", opts: ["relative","fixed","absolute","static"], ans: 3 },
+    { q: "Which property is used to create a flexible layout?", opts: ["grid","flex","float","position"], ans: 1 },
+    { q: "Which pseudo-class targets a hovered element?", opts: [":active",":focus",":hover",":visited"], ans: 2 },
+  ],
+  javascript: [
+    { q: "Which company created JavaScript?", opts: ["Microsoft","Google","Netscape","Apple"], ans: 2 },
+    { q: "How do you declare a variable in modern JS?", opts: ["var x","let x","Both A and B","variable x"], ans: 2 },
+    { q: "What does === check?", opts: ["Value only","Type only","Value and type","Reference"], ans: 2 },
+    { q: "Which method adds an element to the end of an array?", opts: ["push()","pop()","shift()","append()"], ans: 0 },
+    { q: "What is a closure?", opts: ["A loop","A function with access to outer scope","A class","An error handler"], ans: 1 },
+    { q: "What does JSON stand for?", opts: ["Java Standard Object Notation","JavaScript Object Notation","JavaScript Online Notation","Java Open Network"], ans: 1 },
+    { q: "Which keyword is used to define a function?", opts: ["def","fun","function","method"], ans: 2 },
+    { q: "What does typeof null return?", opts: ["null","undefined","object","string"], ans: 2 },
+    { q: "Which method converts JSON string to object?", opts: ["JSON.parse()","JSON.stringify()","JSON.convert()","JSON.object()"], ans: 0 },
+    { q: "What is the output of 2 + '2' in JS?", opts: ["4","22","NaN","Error"], ans: 1 },
+  ],
+  react: [
+    { q: "What is JSX?", opts: ["A database","JavaScript XML syntax","A CSS framework","A backend language"], ans: 1 },
+    { q: "Which hook manages state in a function component?", opts: ["useEffect","useRef","useState","useContext"], ans: 2 },
+    { q: "What does useEffect do?", opts: ["Manages state","Handles side effects","Creates context","Renders JSX"], ans: 1 },
+    { q: "How do you pass data to a child component?", opts: ["state","props","context","ref"], ans: 1 },
+    { q: "What is the virtual DOM?", opts: ["A real browser DOM","A JavaScript copy of the DOM","A CSS selector","A database"], ans: 1 },
+    { q: "Which method renders a React component to the DOM?", opts: ["React.render()","ReactDOM.createRoot().render()","React.mount()","React.start()"], ans: 1 },
+    { q: "What is the key prop used for?", opts: ["Styling","Event handling","Unique identification in lists","Routing"], ans: 2 },
+    { q: "Which company maintains React?", opts: ["Google","Microsoft","Meta","Amazon"], ans: 2 },
+    { q: "What hook fetches data on component mount?", opts: ["useState","useCallback","useEffect","useMemo"], ans: 2 },
+    { q: "What does lifting state up mean?", opts: ["Moving state to a parent","Deleting state","Using global state","Using Redux"], ans: 0 },
+  ],
+  dsa: [
+    { q: "What is the time complexity of binary search?", opts: ["O(n)","O(n²)","O(log n)","O(1)"], ans: 2 },
+    { q: "Which data structure uses LIFO?", opts: ["Queue","Stack","Linked List","Tree"], ans: 1 },
+    { q: "What is the worst-case for bubble sort?", opts: ["O(n log n)","O(n)","O(n²)","O(log n)"], ans: 2 },
+    { q: "Which traversal visits root first?", opts: ["Inorder","Postorder","Preorder","Level order"], ans: 2 },
+    { q: "What is a hash table used for?", opts: ["Sorting","Fast key-value lookup","Graph traversal","Memory management"], ans: 1 },
+    { q: "Which algorithm finds shortest path in a graph?", opts: ["DFS","BFS","Dijkstra's","Merge Sort"], ans: 2 },
+    { q: "What is a linked list?", opts: ["An array","Nodes connected by pointers","A hash table","A binary tree"], ans: 1 },
+    { q: "What does BFS stand for?", opts: ["Binary First Search","Breadth First Search","Base First Sort","Boolean First Search"], ans: 1 },
+    { q: "What is the best time complexity for sorting?", opts: ["O(n)","O(n log n)","O(n²)","O(log n)"], ans: 1 },
+    { q: "A queue uses which principle?", opts: ["LIFO","FILO","FIFO","LILO"], ans: 2 },
+  ],
+};
+
 const QUIZ_TOPICS = [
-  { title: "HTML Quiz", questions: 20, difficulty: "Easy", icon: "🌐", color: "#FFF0E6", accent: "#E44D26" },
-  { title: "CSS Quiz", questions: 25, difficulty: "Easy", icon: "🎨", color: "#F0EEFF", accent: "#264DE4" },
-  { title: "JavaScript Quiz", questions: 30, difficulty: "Medium", icon: "⚡", color: "#FFFBE6", accent: "#C9A800" },
-  { title: "React Quiz", questions: 28, difficulty: "Medium", icon: "⚛️", color: "#E6F9FF", accent: "#0EA5C9" },
-  { title: "DSA Quiz", questions: 40, difficulty: "Hard", icon: "🧩", color: "#FFF0F6", accent: "#D63384" },
+  { title: "HTML Quiz", key: "html", questions: 10, difficulty: "Easy", icon: "🌐", color: "#FFF0E6", accent: "#E44D26" },
+  { title: "CSS Quiz", key: "css", questions: 10, difficulty: "Easy", icon: "🎨", color: "#F0EEFF", accent: "#264DE4" },
+  { title: "JavaScript Quiz", key: "javascript", questions: 10, difficulty: "Medium", icon: "⚡", color: "#FFFBE6", accent: "#C9A800" },
+  { title: "React Quiz", key: "react", questions: 10, difficulty: "Medium", icon: "⚛️", color: "#E6F9FF", accent: "#0EA5C9" },
+  { title: "DSA Quiz", key: "dsa", questions: 10, difficulty: "Hard", icon: "🧩", color: "#FFF0F6", accent: "#D63384" },
 ];
 
 /* ─── STYLES ─────────────────────────────────────────────────── */
@@ -147,7 +214,7 @@ const DASHBOARD_CSS = `
 .pf-read-btn:hover{border-color:#0D9488;color:#0D9488}
 
 /* QUICK ACTIONS */
-.pf-actions-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.pf-actions-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
 .pf-action-card{background:#fff;border:1.5px solid #E8EDF8;border-radius:14px;padding:14px 12px;text-align:center;cursor:pointer;transition:all 0.15s}
 .pf-action-card:hover{border-color:#0D9488;background:#F0FAFA}
 .pf-action-icon{width:40px;height:40px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.1rem;margin:0 auto 8px}
@@ -213,7 +280,7 @@ const DASHBOARD_CSS = `
   .pf-layout{grid-template-columns:180px 1fr}
   .pf-stat-row{grid-template-columns:repeat(2,1fr)}
   .pf-course-grid{grid-template-columns:repeat(2,1fr)}
-  .pf-actions-grid{grid-template-columns:repeat(2,1fr)}
+  .pf-actions-grid{grid-template-columns:repeat(3,1fr)}
   .pf-two-col{grid-template-columns:1fr}
   .pf-welcome{flex-direction:column;align-items:flex-start;gap:1rem}
   .pf-streak-box{align-self:stretch;text-align:left;display:flex;align-items:center;gap:1rem}
@@ -524,11 +591,7 @@ function DashboardView({ user, userProfile, enrolledCourses, certCount, setActiv
             <div className="pf-action-label">Browse E-Books</div>
             <div className="pf-action-sub">{EBOOKS.length} curated books</div>
           </div>
-          <div className="pf-action-card" onClick={() => setActiveSb("chatbot")}>
-            <div className="pf-action-icon" style={{ background: "#F3E8FF" }}>🤖</div>
-            <div className="pf-action-label">AI Assistant</div>
-            <div className="pf-action-sub">Powered by Botpress</div>
-          </div>
+
         </div>
       </div>
 
@@ -700,12 +763,91 @@ function CoursesView({ enrolledCourses }) {
 
 /* ─── VIEW: QUIZZES ──────────────────────────────────────────── */
 function QuizzesView() {
+  const [active, setActive] = React.useState(null);   // key of active quiz
+  const [current, setCurrent] = React.useState(0);
+  const [selected, setSelected] = React.useState(null);
+  const [answers, setAnswers] = React.useState([]);
+  const [finished, setFinished] = React.useState(false);
+
+  const startQuiz = (key) => { setActive(key); setCurrent(0); setSelected(null); setAnswers([]); setFinished(false); };
+  const resetQuiz = () => { setActive(null); setFinished(false); };
+
+  if (active) {
+    const qs = QUIZ_BANK[active];
+    const q = qs[current];
+    const score = answers.filter((a, i) => a === qs[i].ans).length;
+
+    if (finished) {
+      const pct = Math.round((score / qs.length) * 100);
+      const badge = pct >= 80 ? { label: "🏆 Excellent!", color: "#22C55E" } : pct >= 50 ? { label: "👍 Good job!", color: "#F59E0B" } : { label: "📚 Keep practising!", color: "#EF4444" };
+      return (
+        <>
+          <div className="pf-page-hd"><div className="pf-page-hd-title">🧠 Quiz Results</div><div className="pf-page-hd-sub">{QUIZ_TOPICS.find(t=>t.key===active)?.title}</div></div>
+          <div style={{ background:"#fff", border:"1.5px solid #E8EDF8", borderRadius:"16px", padding:"2rem", textAlign:"center" }}>
+            <div style={{ fontSize:"3rem", marginBottom:"12px" }}>{pct>=80?"🏆":pct>=50?"🎯":"📖"}</div>
+            <div style={{ fontFamily:"'Space Grotesk',sans-serif", fontSize:"2rem", fontWeight:700, color:badge.color }}>{score}/{qs.length}</div>
+            <div style={{ fontSize:"1rem", fontWeight:700, color:badge.color, margin:"6px 0 16px" }}>{badge.label}</div>
+            <div style={{ width:"100%", height:10, background:"#E8EDF8", borderRadius:10, marginBottom:"1.5rem", overflow:"hidden" }}>
+              <div style={{ height:"100%", width:`${pct}%`, background:badge.color, borderRadius:10, transition:"width 0.6s" }} />
+            </div>
+            {qs.map((item, i) => (
+              <div key={i} style={{ display:"flex", alignItems:"flex-start", gap:"10px", padding:"10px 0", borderBottom:"1px solid #F1F5F9", textAlign:"left" }}>
+                <span style={{ fontSize:"1rem", flexShrink:0 }}>{answers[i]===item.ans?"✅":"❌"}</span>
+                <div style={{ flex:1 }}>
+                  <div style={{ fontSize:"0.82rem", fontWeight:600, color:"#1A1F36", marginBottom:2 }}>{item.q}</div>
+                  <div style={{ fontSize:"0.72rem", color:answers[i]===item.ans?"#16A34A":"#EF4444" }}>
+                    Your answer: {item.opts[answers[i]]} {answers[i]!==item.ans && `· Correct: ${item.opts[item.ans]}`}
+                  </div>
+                </div>
+              </div>
+            ))}
+            <div style={{ display:"flex", gap:10, justifyContent:"center", marginTop:"1.5rem" }}>
+              <button onClick={() => startQuiz(active)} style={{ background:"#0D9488", color:"#fff", border:"none", padding:"10px 22px", borderRadius:9, fontWeight:700, fontSize:"0.82rem", cursor:"pointer", fontFamily:"inherit" }}>Retry Quiz</button>
+              <button onClick={resetQuiz} style={{ background:"#F1F5F9", color:"#475569", border:"none", padding:"10px 22px", borderRadius:9, fontWeight:700, fontSize:"0.82rem", cursor:"pointer", fontFamily:"inherit" }}>All Quizzes</button>
+            </div>
+          </div>
+        </>
+      );
+    }
+
+    return (
+      <>
+        <div className="pf-page-hd"><div className="pf-page-hd-title">🧠 {QUIZ_TOPICS.find(t=>t.key===active)?.title}</div><div className="pf-page-hd-sub">Question {current+1} of {qs.length}</div></div>
+        <div style={{ background:"#fff", border:"1.5px solid #E8EDF8", borderRadius:"16px", padding:"1.75rem" }}>
+          <div style={{ width:"100%", height:6, background:"#E8EDF8", borderRadius:10, marginBottom:"1.5rem", overflow:"hidden" }}>
+            <div style={{ height:"100%", width:`${((current)/qs.length)*100}%`, background:"#0D9488", borderRadius:10, transition:"width 0.3s" }} />
+          </div>
+          <div style={{ fontFamily:"'Space Grotesk',sans-serif", fontSize:"1.05rem", fontWeight:700, color:"#1A1F36", marginBottom:"1.25rem", lineHeight:1.5 }}>{q.q}</div>
+          <div style={{ display:"flex", flexDirection:"column", gap:"10px", marginBottom:"1.5rem" }}>
+            {q.opts.map((opt, oi) => (
+              <button key={oi} onClick={() => setSelected(oi)}
+                style={{ padding:"12px 16px", borderRadius:10, border:`2px solid ${selected===oi?"#0D9488":"#E8EDF8"}`, background:selected===oi?"#E6FAF7":"#FAFBFF", color:"#1A1F36", fontSize:"0.85rem", fontWeight:selected===oi?700:500, cursor:"pointer", textAlign:"left", fontFamily:"inherit", transition:"all 0.15s" }}>
+                <span style={{ marginRight:8, fontWeight:700, color:selected===oi?"#0D9488":"#94A3B8" }}>{String.fromCharCode(65+oi)}.</span>{opt}
+              </button>
+            ))}
+          </div>
+          <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center" }}>
+            <button onClick={resetQuiz} style={{ background:"transparent", border:"none", color:"#94A3B8", fontSize:"0.78rem", cursor:"pointer", fontFamily:"inherit" }}>← Back</button>
+            <button disabled={selected===null}
+              onClick={() => {
+                const newAns = [...answers, selected];
+                setAnswers(newAns);
+                setSelected(null);
+                if (current + 1 >= qs.length) setFinished(true);
+                else setCurrent(c => c+1);
+              }}
+              style={{ background:selected===null?"#E8EDF8":"#0D9488", color:selected===null?"#94A3B8":"#fff", border:"none", padding:"10px 24px", borderRadius:9, fontWeight:700, fontSize:"0.82rem", cursor:selected===null?"not-allowed":"pointer", fontFamily:"inherit", transition:"all 0.2s" }}>
+              {current+1===qs.length ? "Finish Quiz" : "Next →"}
+            </button>
+          </div>
+        </div>
+      </>
+    );
+  }
+
   return (
     <>
-      <div className="pf-page-hd">
-        <div className="pf-page-hd-title">🧠 Quizzes</div>
-        <div className="pf-page-hd-sub">{QUIZ_TOPICS.length} quiz topics · Test your knowledge and sharpen your skills</div>
-      </div>
+      <div className="pf-page-hd"><div className="pf-page-hd-title">🧠 Quizzes</div><div className="pf-page-hd-sub">{QUIZ_TOPICS.length} topics · 10 questions each · Instant results</div></div>
       <div className="pf-quiz-list">
         {QUIZ_TOPICS.map((q, i) => (
           <div key={i} className="pf-quiz-item">
@@ -715,14 +857,9 @@ function QuizzesView() {
               <div className="pf-quiz-sub">{q.questions} questions · Real-time evaluation · Instant results</div>
             </div>
             <span className={`pf-quiz-diff pf-diff-${q.difficulty.toLowerCase()}`}>{q.difficulty}</span>
-            <button className="pf-start-btn">Start Quiz →</button>
+            <button className="pf-start-btn" onClick={() => startQuiz(q.key)}>Start Quiz →</button>
           </div>
         ))}
-      </div>
-      {/* Info banner */}
-      <div style={{ background: "#FEF9C3", border: "1.5px solid #FDE68A", borderRadius: "12px", padding: "14px 18px", fontSize: "0.8rem", color: "#854D0E", display: "flex", gap: "10px", alignItems: "center" }}>
-        <span style={{ fontSize: "1.1rem" }}>⚠️</span>
-        <span>Quiz functionality coming soon! Questions are being prepared for each topic.</span>
       </div>
     </>
   );
@@ -732,9 +869,10 @@ function QuizzesView() {
 function EBooksView() {
   return (
     <>
-      <div className="pf-page-hd">
-        <div className="pf-page-hd-title">📖 E-Book Library</div>
-        <div className="pf-page-hd-sub">{EBOOKS.length} curated programming books · Build your reading list</div>
+      <div className="pf-page-hd"><div className="pf-page-hd-title">📖 E-Book Library</div><div className="pf-page-hd-sub">{EBOOKS.length} free programming resources · Click any book to read online</div></div>
+      <div style={{ background:"#DCFCE7", border:"1.5px solid #86EFAC", borderRadius:"12px", padding:"12px 16px", fontSize:"0.8rem", color:"#166534", display:"flex", gap:"10px", alignItems:"center", marginBottom:"4px" }}>
+        <span style={{ fontSize:"1.1rem" }}>✅</span>
+        <span>All books below are <strong>100% free</strong> — click "Read →" to open them online instantly!</span>
       </div>
       <div className="pf-ebook-list">
         {EBOOKS.map((b, i) => (
@@ -743,41 +881,19 @@ function EBooksView() {
             <div className="pf-ebook-info">
               <div className="pf-ebook-title">{b.title}</div>
               <div className="pf-ebook-author">by {b.author}</div>
-              <div className="pf-ebook-pages">📄 {b.pages} pages</div>
+              <div className="pf-ebook-pages">📄 {b.pages} pages · <span style={{ background:"#DCFCE7", color:"#166534", fontSize:"0.62rem", fontWeight:700, padding:"2px 6px", borderRadius:20 }}>{b.tag}</span></div>
             </div>
-            <button className="pf-read-btn">Read →</button>
+            <a href={b.url} target="_blank" rel="noreferrer"
+              style={{ background:"#0D9488", color:"#fff", border:"none", padding:"8px 14px", borderRadius:8, fontSize:"0.72rem", fontWeight:700, textDecoration:"none", flexShrink:0, display:"inline-flex", alignItems:"center", gap:4 }}>
+              Read →
+            </a>
           </div>
         ))}
-      </div>
-      <div style={{ background: "#EFF6FF", border: "1.5px solid #BFDBFE", borderRadius: "12px", padding: "14px 18px", fontSize: "0.8rem", color: "#1D4ED8", display: "flex", gap: "10px", alignItems: "center" }}>
-        <span style={{ fontSize: "1.1rem" }}>📚</span>
-        <span>E-Book reader coming soon! PDF links will be available for each book shortly.</span>
       </div>
     </>
   );
 }
 
-/* ─── VIEW: AI ASSISTANT ─────────────────────────────────────── */
-function ChatbotView() {
-  return (
-    <>
-      <div className="pf-page-hd" style={{ background: "linear-gradient(120deg,#1E1B4B,#312E81)" }}>
-        <div className="pf-page-hd-title">🤖 AI Learning Assistant</div>
-        <div className="pf-page-hd-sub">Powered by Botpress · Get instant answers to your coding questions</div>
-      </div>
-      <div style={{ background: "#fff", border: "1.5px solid #E8EDF8", borderRadius: "14px", padding: "2rem", textAlign: "center" }}>
-        <div style={{ fontSize: "3rem", marginBottom: "12px" }}>🤖</div>
-        <div style={{ fontFamily: "'Space Grotesk',sans-serif", fontSize: "1rem", fontWeight: 700, color: "#1A1F36", marginBottom: "8px" }}>AI Chatbot is ready!</div>
-        <div style={{ fontSize: "0.82rem", color: "#64748B", marginBottom: "1.5rem", maxWidth: "340px", margin: "0 auto 1.5rem", lineHeight: 1.6 }}>
-          The chatbot widget is available at the bottom-right corner of your screen. Click it to start chatting!
-        </div>
-        <div style={{ display: "inline-flex", alignItems: "center", gap: "8px", background: "#A5B4FC", color: "#1E1B4B", padding: "10px 20px", borderRadius: "10px", fontWeight: 700, fontSize: "0.82rem" }}>
-          👇 Look for the chat bubble at the bottom right
-        </div>
-      </div>
-    </>
-  );
-}
 
 /* ─── VIEW: MY PROFILE ───────────────────────────────────────── */
 function ProfileInfoView({ user, enrolledCourses }) {
@@ -1019,7 +1135,7 @@ function ActivityPageView({ enrolledCourses, userProfile }) {
 /* ─── MAIN PROFILE COMPONENT ─────────────────────────────────── */
 
 export default function Profile() {
-  const { user, isAuthenticated, isLoading, getAccessTokenSilently } = useAuth0();
+  const { user, isAuthenticated, isLoading, getIdTokenClaims } = useAuth0();
   const [userProfile, setUserProfile] = React.useState(null);
   const [activeSb, setActiveSb] = useState("dashboard");
 
@@ -1027,7 +1143,7 @@ export default function Profile() {
     const fetchProfile = async () => {
       if (isAuthenticated) {
         try {
-          const token = await getAccessTokenSilently(accessTokenSilentlyOpts());
+          const token = await getIdToken(getIdTokenClaims);
           const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
           const response = await axios.get(`${API_URL}/api/user/profile`, {
             headers: { Authorization: `Bearer ${token}` },
@@ -1039,7 +1155,7 @@ export default function Profile() {
       }
     };
     fetchProfile();
-  }, [isAuthenticated, getAccessTokenSilently]);
+  }, [isAuthenticated, getIdTokenClaims]);
 
   const sbItems = [
     { id: "dashboard",  icon: "🏠", label: "Dashboard" },
@@ -1074,8 +1190,9 @@ export default function Profile() {
       case "dashboard": return <DashboardView user={user} userProfile={userProfile} enrolledCourses={enrolledCourses} certCount={certCount} setActiveSb={setActiveSb} />;
       case "learning": return <MyLearningView userProfile={userProfile} enrolledCourses={enrolledCourses} setActiveSb={setActiveSb} />;
       case "courses": return <CoursesView enrolledCourses={enrolledCourses} />;
-      case "quizzes": return <QuizzesView />;
-      case "ebooks": return <EBooksView />;
+      case "quizzes":  return <QuizzesView />;
+      case "ebooks":   return <EBooksView />;
+
       case "activity": return <ActivityPageView enrolledCourses={enrolledCourses} userProfile={userProfile} />;
       case "feedback": return <FeedbackView />;
       default: return <DashboardView user={user} userProfile={userProfile} enrolledCourses={enrolledCourses} certCount={certCount} setActiveSb={setActiveSb} />;
