@@ -1,4 +1,4 @@
-#  OnLearny – Full Stack eLearning Website
+#  OnLearny – Full Stack eLearning Platform 
 
 <p align="center">
   <img src="https://img.shields.io/badge/Project-Internship-blueviolet?style=for-the-badge" alt="Project: Internship" />
@@ -10,13 +10,12 @@
 </p>
 
 <p align="center">
-  <b>A modern full-stack elearning platform with courses, quizzes, and AI assistance</b>
+  <b>A comprehensive online learning platform designed to help users learn web development, programming, and various modern technologies.</b>
 </p>
 
 ---
 
-## 🌐 Live 
-👉 **[https://onlearny.vercel.app/](https://onlearny.vercel.app/)**
+## 🌐 WEBSITE LINK : **[https://onlearny.vercel.app/](https://onlearny.vercel.app/)**
 
 
 ---
@@ -103,6 +102,16 @@ OnLearny/
 
 **SK Mimraj**
 
-* 🎓 Final Year IT Student 
-* 🌐 
+* 🎓 Final Year IT Student - MAKAUT
+* 📧 Email: skmimraj791@gmail.com 
+
+---
+
+# ⭐ Support the Project
+
+If you like this project and find it useful, please consider:
+
+* ⭐ Starring the repo
+* 🔄 Sharing with others
+* 🧩 Contributing features
 
