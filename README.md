@@ -109,7 +109,7 @@ OnLearny/
 
 # ⭐ Support the Project
 
-If you like this project and find it useful, please consider:
+If you like this project, please consider:
 
 * ⭐ Starring the repo
 * 🔄 Sharing with others
